@@ -1,0 +1,9 @@
+name: dart_code_metrics_github_action_app
+version: 1.0.0
+description: Github action app that helps to run dart_code_metrics in CI/CD flow.
+homepage: https://github.com/dart-code-checker/run-dart-code-metrics-action
+issue_tracker: https://github.com/dart-code-checker/run-dart-code-metrics-action/issues
+publish_to: none
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
