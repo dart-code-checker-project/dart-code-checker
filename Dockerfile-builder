@@ -1,0 +1,14 @@
+FROM google/dart:latest AS dartimage
+
+COPY app/ /app/
+
+# Compiling the Dart application that manages this action
+RUN cd /app \
+    && pub upgrade \
+    && dart2native /app/bin/main.dart -o /app/dart_code_checker
+
+# Using the latest version of the Dart SDK
+FROM google/dart:beta
+
+# Copying only the executable
+COPY --from=dartimage /app/dart_code_checker /dart_code_checker

@@ -1,7 +1,3 @@
-FROM alpine:3.10
+FROM dart_code_checker/dart_code_checker:v3
 
-COPY LICENSE README.md /
-
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/dart_code_checker"]
