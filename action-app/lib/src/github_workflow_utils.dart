@@ -31,3 +31,18 @@ String currentCommitSHA() {
 /// Returns slug of the repository
 String currentRepositorySlug() =>
     Platform.environment['GITHUB_REPOSITORY'] as String;
+
+/// Path to the folder containing the entire repository
+String get currentPathToRepoRoot {
+  const envVarWorkspace = 'GITHUB_WORKSPACE';
+  final repoPath = Platform.environment[envVarWorkspace];
+  if (repoPath == null) {
+    throw ArgumentError.value(
+      repoPath,
+      envVarWorkspace,
+      "Make sure you call 'actions/checkout' in a previous step. Invalid environment variable",
+    );
+  }
+
+  return repoPath;
+}
