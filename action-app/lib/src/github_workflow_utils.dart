@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 /// Returns head SHA of the commit associated to the current workflow
-String? currentCommitSHA() {
-  final commitSha = Platform.environment['GITHUB_SHA'];
+String currentCommitSHA() {
+  final commitSha = Platform.environment['GITHUB_SHA'] as String;
   stderr.writeln('SHA that triggered the workflow: $commitSha');
 
   final pathEventPayload = Platform.environment['GITHUB_EVENT_PATH'];
@@ -27,3 +27,7 @@ String? currentCommitSHA() {
 
   return commitSha;
 }
+
+/// Returns slug of the repository
+String currentRepositorySlug() =>
+    Platform.environment['GITHUB_REPOSITORY'] as String;
