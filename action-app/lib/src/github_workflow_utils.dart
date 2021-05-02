@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+const _envVarGitHubWorkspace = 'GITHUB_WORKSPACE';
+
 /// Returns head SHA of the commit associated to the current workflow
 String currentCommitSHA() {
   final commitSha = Platform.environment['GITHUB_SHA'] as String;
@@ -34,12 +36,11 @@ String currentRepositorySlug() =>
 
 /// Path to the folder containing the entire repository
 String currentPathToRepoRoot() {
-  const envVarWorkspace = 'GITHUB_WORKSPACE';
-  final repoPath = Platform.environment[envVarWorkspace];
+  final repoPath = Platform.environment[_envVarGitHubWorkspace];
   if (repoPath == null) {
     throw ArgumentError.value(
       repoPath,
-      envVarWorkspace,
+      _envVarGitHubWorkspace,
       "Make sure you call 'actions/checkout' in a previous step. Invalid environment variable",
     );
   }
