@@ -33,7 +33,7 @@ String currentRepositorySlug() =>
     Platform.environment['GITHUB_REPOSITORY'] as String;
 
 /// Path to the folder containing the entire repository
-String get currentPathToRepoRoot {
+String currentPathToRepoRoot() {
   const envVarWorkspace = 'GITHUB_WORKSPACE';
   final repoPath = Platform.environment[envVarWorkspace];
   if (repoPath == null) {
