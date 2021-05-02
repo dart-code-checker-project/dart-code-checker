@@ -2,6 +2,9 @@ name: test
 
 on: [push, pull_request]
 
+env:
+  INPUT_GITHUBTOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   test:
     name: Test on stable dart
