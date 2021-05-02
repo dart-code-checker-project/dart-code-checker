@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 env:
   INPUT_GITHUBTOKEN: ${{ secrets.GITHUB_TOKEN }}
+  INPUT_RELATIVEPATH: "action-app"
 
 jobs:
   test:
