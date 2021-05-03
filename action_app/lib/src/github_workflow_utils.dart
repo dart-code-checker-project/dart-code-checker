@@ -63,3 +63,13 @@ void _echo(String command, {String? message, Map<String, String>? parameters}) {
 
   stdout.writeln(sb.toString());
 }
+
+// ignore: long-parameter-list
+void _log(
+  String command,
+  String message,
+  String? file,
+  String? line,
+  String? column,
+) =>
+    _echo(command, message: message, parameters: _params(file, line, column));
