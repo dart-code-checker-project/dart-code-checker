@@ -58,8 +58,8 @@ String currentPathToRepoRoot() {
 void logDebugMessage(
   String message, {
   String? file,
-  String? line,
-  String? column,
+  int? line,
+  int? column,
 }) =>
     _log('debug', message, file, line, column);
 
@@ -69,8 +69,8 @@ void logDebugMessage(
 void logWarningMessage(
   String message, {
   String? file,
-  String? line,
-  String? column,
+  int? line,
+  int? column,
 }) =>
     _log('warning', message, file, line, column);
 
@@ -95,13 +95,13 @@ void _log(
   String command,
   String message,
   String? file,
-  String? line,
-  String? column,
+  int? line,
+  int? column,
 ) {
   final parameters = {
     if (file != null) 'file': file,
-    if (line != null) 'line': line,
-    if (column != null) 'col': column,
+    if (line != null) 'line': '$line',
+    if (column != null) 'col': '$column',
   };
 
   _echo(command, message: message, parameters: parameters);
