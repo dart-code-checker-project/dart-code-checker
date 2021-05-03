@@ -6,7 +6,7 @@ const _envVarGitHubWorkspace = 'GITHUB_WORKSPACE';
 /// Returns head SHA of the commit associated to the current workflow
 String currentCommitSHA() {
   final commitSha = Platform.environment['GITHUB_SHA'] as String;
-  stderr.writeln('SHA that triggered the workflow: $commitSha');
+  logDebugMessage('SHA that triggered the workflow: $commitSha');
 
   final pathEventPayload = Platform.environment['GITHUB_EVENT_PATH'];
   if (pathEventPayload != null) {
@@ -20,7 +20,8 @@ String currentCommitSHA() {
       final headSha =
           (pullRequest['head'] as Map<String, dynamic>)['sha'] as String;
       if (commitSha != headSha) {
-        stderr..writeln('Base SHA: $baseSha')..writeln('Head SHA: $headSha');
+        logDebugMessage('Base SHA: $baseSha');
+        logDebugMessage('Head SHA: $headSha');
 
         return headSha;
       }
