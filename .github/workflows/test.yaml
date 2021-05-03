@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
   INPUT_GITHUBTOKEN: ${{ secrets.GITHUB_TOKEN }}
-  INPUT_RELATIVEPATH: "action-app"
+  INPUT_RELATIVEPATH: "action_app"
 
 jobs:
   test:
@@ -15,7 +15,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: action-app
+        working-directory: action_app
 
     steps:
       - uses: dart-lang/setup-dart@v1
