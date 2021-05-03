@@ -60,8 +60,9 @@ void logDebugMessage(
   String? file,
   int? line,
   int? column,
-}) =>
-    _log('debug', message, file, line, column);
+}) {
+  _log('debug', message, file, line, column);
+}
 
 /// Creates a warning message and prints the message to the log.
 ///
@@ -71,8 +72,20 @@ void logWarningMessage(
   String? file,
   int? line,
   int? column,
-}) =>
-    _log('warning', message, file, line, column);
+}) {
+  _log('warning', message, file, line, column);
+}
+
+void startLogGroup(String groupName) {
+  _echo('group', message: groupName);
+}
+
+void endLogGroup() {
+  _echo('endgroup');
+}
+
+bool isTestMode() =>
+    currentRepositorySlug() == 'dart-code-checker/run-dart-code-metrics-action';
 
 void _echo(String command, {String? message, Map<String, String>? parameters}) {
   final sb = StringBuffer('::$command');
@@ -89,9 +102,6 @@ void _echo(String command, {String? message, Map<String, String>? parameters}) {
 
   stdout.writeln(sb.toString());
 }
-
-bool isTestMode() =>
-    currentRepositorySlug() == 'dart-code-checker/run-dart-code-metrics-action';
 
 // ignore: long-parameter-list
 void _log(
