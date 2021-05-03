@@ -86,5 +86,12 @@ void _log(
   String? file,
   String? line,
   String? column,
-) =>
-    _echo(command, message: message, parameters: _params(file, line, column));
+) {
+  final parameters = {
+    if (file != null) 'file': file,
+    if (line != null) 'line': line,
+    if (column != null) 'col': column,
+  };
+
+  _echo(command, message: message, parameters: parameters);
+}
