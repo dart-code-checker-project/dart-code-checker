@@ -90,6 +90,9 @@ void _echo(String command, {String? message, Map<String, String>? parameters}) {
   stdout.writeln(sb.toString());
 }
 
+bool isTestMode() =>
+    currentRepositorySlug() == 'dart-code-checker/run-dart-code-metrics-action';
+
 // ignore: long-parameter-list
 void _log(
   String command,
