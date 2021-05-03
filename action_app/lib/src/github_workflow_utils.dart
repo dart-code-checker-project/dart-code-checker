@@ -47,3 +47,19 @@ String currentPathToRepoRoot() {
 
   return repoPath;
 }
+
+void _echo(String command, {String? message, Map<String, String>? parameters}) {
+  final sb = StringBuffer('::$command');
+
+  final params =
+      parameters?.entries.map((e) => '${e.key}=${e.value}').join(',');
+  if (params != null && params.isNotEmpty) {
+    sb.write(' $params');
+  }
+  sb.write('::');
+  if (message != null) {
+    sb.write(message);
+  }
+
+  stdout.writeln(sb.toString());
+}
