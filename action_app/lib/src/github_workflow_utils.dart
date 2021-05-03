@@ -51,7 +51,7 @@ String currentPathToRepoRoot() {
 
 /// Prints a debug message to the log.
 ///
-/// You must create a secret named `ACTIONS_STEP_DEBUG` with the value `true`
+/// You must [enabling step debug logging](https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging#enabling-step-debug-logging)
 /// to see the debug messages set by this command in the log.
 /// To learn more about creating secrets and using them in a step,
 /// see "[Creating and using encrypted secrets.](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)"
