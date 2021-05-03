@@ -48,6 +48,20 @@ String currentPathToRepoRoot() {
   return repoPath;
 }
 
+/// Prints a debug message to the log.
+///
+/// You must create a secret named `ACTIONS_STEP_DEBUG` with the value `true`
+/// to see the debug messages set by this command in the log.
+/// To learn more about creating secrets and using them in a step,
+/// see "[Creating and using encrypted secrets.](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)"
+void logDebugMessage(
+  String message, {
+  String? file,
+  String? line,
+  String? column,
+}) =>
+    _log('debug', message, file, line, column);
+
 void _echo(String command, {String? message, Map<String, String>? parameters}) {
   final sb = StringBuffer('::$command');
 
