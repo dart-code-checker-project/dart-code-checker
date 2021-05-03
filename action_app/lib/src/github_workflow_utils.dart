@@ -64,6 +64,10 @@ void logDebugMessage(
   _log('debug', message, file, line, column);
 }
 
+void logInfoMessage(String message) {
+  stdout.writeln(message);
+}
+
 /// Creates a warning message and prints the message to the log.
 ///
 /// You can optionally provide a filename ([file]), line number ([line]), and column ([column]) number where the warning occurred.
