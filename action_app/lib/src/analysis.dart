@@ -66,4 +66,29 @@ class Analysis {
       status: CheckRunStatus.inProgress,
     );
   }
+
+  Future<void> cancel({required Exception cause}) async {
+    if (_checkRun == null) {
+      return;
+    }
+
+    logDebugMessage("Checkrun cancelled. Conclusion is 'CANCELLED'.");
+    await _client.checks.checkRuns.updateCheckRun(
+      _repositorySlug,
+      _checkRun!,
+      startedAt: _startTime,
+      completedAt: DateTime.now(),
+      status: CheckRunStatus.completed,
+      conclusion: isTestMode()
+          ? CheckRunConclusion.neutral
+          : CheckRunConclusion.cancelled,
+      output: CheckRunOutput(
+        title: _checkRun?.name ?? '',
+        summary:
+            'This check run has been cancelled, due to the following error:'
+            '\n\n```\n$cause\n```\n\n'
+            'Check your logs for more information.',
+      ),
+    );
+  }
 }
