@@ -44,12 +44,26 @@ class Analysis {
   }
 
   final GitHub _client;
-  late final CheckRun? _checkRun;
+  final CheckRun? _checkRun;
   final RepositorySlug _repositorySlug;
+  final DateTime _startTime;
 
   Analysis._(
     this._client,
     this._checkRun,
     this._repositorySlug,
-  );
+  ) : _startTime = DateTime.now();
+
+  Future<void> run() async {
+    if (_checkRun == null) {
+      return;
+    }
+
+    await _client.checks.checkRuns.updateCheckRun(
+      _repositorySlug,
+      _checkRun!,
+      startedAt: _startTime,
+      status: CheckRunStatus.inProgress,
+    );
+  }
 }
