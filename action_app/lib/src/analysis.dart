@@ -48,11 +48,8 @@ class Analysis {
   final RepositorySlug _repositorySlug;
   final DateTime _startTime;
 
-  Analysis._(
-    this._client,
-    this._checkRun,
-    this._repositorySlug,
-  ) : _startTime = DateTime.now();
+  Analysis._(this._client, this._checkRun, this._repositorySlug)
+      : _startTime = DateTime.now();
 
   Future<void> run() async {
     if (_checkRun == null) {
