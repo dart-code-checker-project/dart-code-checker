@@ -63,6 +63,17 @@ void logDebugMessage(
 }) =>
     _log('debug', message, file, line, column);
 
+/// Creates a warning message and prints the message to the log.
+///
+/// You can optionally provide a filename ([file]), line number ([line]), and column ([column]) number where the warning occurred.
+void logWarningMessage(
+  String message, {
+  String? file,
+  String? line,
+  String? column,
+}) =>
+    _log('warning', message, file, line, column);
+
 void _echo(String command, {String? message, Map<String, String>? parameters}) {
   final sb = StringBuffer('::$command');
 
