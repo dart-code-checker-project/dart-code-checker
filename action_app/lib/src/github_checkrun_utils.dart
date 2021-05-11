@@ -1,7 +1,4 @@
 // ignore: implementation_imports
-import 'dart:io';
-
-// ignore: implementation_imports
 import 'package:dart_code_metrics/src/analyzers/models/issue.dart' as dcm;
 // ignore: implementation_imports
 import 'package:dart_code_metrics/src/analyzers/models/severity.dart' as dcm;
