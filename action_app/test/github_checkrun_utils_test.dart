@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 class GitHubWorkflowUtilsMock extends Mock implements GitHubWorkflowUtils {}
 
 void main() {
-  group('severityToAnnotationLevel returns', () {
+  group('GitHubCheckRunUtils.severityToAnnotationLevel returns', () {
     late GitHubWorkflowUtilsMock workflowUtilsMock;
 
     setUp(() {
