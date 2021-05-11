@@ -1,6 +1,11 @@
 // ignore: implementation_imports
-import 'package:dart_code_metrics/src/analyzers/models/severity.dart';
-import 'package:github/github.dart';
+import 'dart:io';
+
+// ignore: implementation_imports
+import 'package:dart_code_metrics/src/analyzers/models/issue.dart' as dcm;
+// ignore: implementation_imports
+import 'package:dart_code_metrics/src/analyzers/models/severity.dart' as dcm;
+import 'package:github/github.dart' as github;
 
 import 'github_workflow_utils.dart';
 
@@ -9,20 +14,24 @@ class GitHubCheckRunUtils {
 
   const GitHubCheckRunUtils(this._workflowUtils);
 
-  CheckRunAnnotationLevel severityToAnnotationLevel(Severity severity) {
+  bool isSupportIssue(dcm.Issue issue) => issue.location.sourceUrl != null;
+
+  github.CheckRunAnnotationLevel severityToAnnotationLevel(
+    dcm.Severity severity,
+  ) {
     if (_severityMapping.containsKey(severity)) {
       return _severityMapping[severity]!;
     }
 
     _workflowUtils.logInfoMessage('Unknow severity: $severity');
 
-    return CheckRunAnnotationLevel.notice;
+    return github.CheckRunAnnotationLevel.notice;
   }
 }
 
 const _severityMapping = {
-  Severity.style: CheckRunAnnotationLevel.notice,
-  Severity.performance: CheckRunAnnotationLevel.warning,
-  Severity.warning: CheckRunAnnotationLevel.warning,
-  Severity.error: CheckRunAnnotationLevel.failure,
+  dcm.Severity.style: github.CheckRunAnnotationLevel.notice,
+  dcm.Severity.performance: github.CheckRunAnnotationLevel.warning,
+  dcm.Severity.warning: github.CheckRunAnnotationLevel.warning,
+  dcm.Severity.error: github.CheckRunAnnotationLevel.failure,
 };

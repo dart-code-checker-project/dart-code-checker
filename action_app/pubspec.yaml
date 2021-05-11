@@ -19,4 +19,5 @@ dev_dependencies:
   coverage: ^1.0.2
   mocktail: ^0.1.2
   pedantic: ^1.11.0
+  source_span: ^1.8.0
   test: ^1.17.3
