@@ -11,7 +11,6 @@ class GitHubCheckRunUtils {
 
   const GitHubCheckRunUtils(this._workflowUtils);
 
-  bool isSupportIssue(dcm.Issue issue) => issue.location.sourceUrl != null;
 
   github.CheckRunAnnotationLevel severityToAnnotationLevel(
     dcm.Severity severity,
