@@ -1,9 +1,13 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:dart_code_metrics/reporters.dart';
+// ignore: implementation_imports
+import 'package:dart_code_metrics/src/analyzers/models/severity.dart';
 import 'package:github/github.dart';
 
 import 'arguments.dart';
+import 'github_checkrun_utils.dart';
 import 'github_workflow_utils.dart';
 
 const _checkRunName = 'Dart Code Metrics report';
@@ -31,7 +35,6 @@ class Analysis {
         detailsUrl: _homePage,
         externalId: id,
       );
-
       return Analysis._(client, checkRun, slug);
     } on GitHubError catch (e) {
       if (e.toString().contains('Resource not accessible by integration')) {
@@ -66,6 +69,70 @@ class Analysis {
       startedAt: _startTime,
       status: CheckRunStatus.inProgress,
     );
+  }
+
+  Future<void> complete(Iterable<FileReport> report) async {
+    if (_checkRun == null) {
+      return;
+    }
+
+    final workflowUtils = GitHubWorkflowUtils(stdout);
+    final checkRunUtils = GitHubCheckRunUtils(workflowUtils);
+
+    final conclusion = report.any((file) => [
+              ...file.antiPatternCases,
+              ...file.issues,
+            ].any((issue) => issue.severity != Severity.none))
+        ? CheckRunConclusion.failure
+        : CheckRunConclusion.success;
+
+    const title = 'Package analysis results';
+
+    final name = StringBuffer('Analysis of repository');
+    final summary = StringBuffer();
+    if (workflowUtils.isTestMode()) {
+      name.write(' (${_checkRun?.externalId})');
+      summary
+        ..writeln('**THIS ACTION HAS BEEN EXECUTED IN TEST MODE.**')
+        ..writeln('**Conclusion = `$conclusion`**');
+    }
+
+    final checkRun = await _client.checks.checkRuns.updateCheckRun(
+      _repositorySlug,
+      _checkRun!,
+      name: name.toString(),
+      status: CheckRunStatus.completed,
+      startedAt: _startTime,
+      completedAt: DateTime.now(),
+      conclusion:
+          workflowUtils.isTestMode() ? CheckRunConclusion.neutral : conclusion,
+      output: CheckRunOutput(
+        title: title,
+        summary: summary.toString(),
+        text: 'simple report',
+        annotations: report
+            .map((file) => [
+                  ...file.antiPatternCases.map(
+                    (issue) =>
+                        checkRunUtils.issueToAnnotation(file.path, issue),
+                  ),
+                  ...file.issues.map(
+                    (issue) =>
+                        checkRunUtils.issueToAnnotation(file.path, issue),
+                  ),
+                ])
+            .expand((issues) => issues)
+            .toList()
+              ..forEach((issue) {
+                workflowUtils.logDebugMessage('issue: ${issue.toJson()}');
+              }),
+      ),
+    );
+
+    workflowUtils
+      ..logInfoMessage('Check Run Id: ${checkRun.id}')
+      ..logInfoMessage('Check Suite Id: ${checkRun.checkSuiteId}')
+      ..logInfoMessage('Report posted at: ${checkRun.detailsUrl}');
   }
 
   Future<void> cancel({required Exception cause}) async {
