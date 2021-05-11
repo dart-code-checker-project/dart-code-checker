@@ -3,6 +3,7 @@ import 'package:dart_code_metrics/src/analyzers/models/issue.dart' as dcm;
 // ignore: implementation_imports
 import 'package:dart_code_metrics/src/analyzers/models/severity.dart' as dcm;
 import 'package:github/github.dart' as github;
+import 'package:path/path.dart' as p;
 
 import 'github_workflow_utils.dart';
 
@@ -11,6 +12,32 @@ class GitHubCheckRunUtils {
 
   const GitHubCheckRunUtils(this._workflowUtils);
 
+  github.CheckRunAnnotation issueToAnnotation(
+    String sourceAbsolutePath,
+    dcm.Issue issue,
+  ) {
+    final isSingleLineIssue =
+        issue.location.start.line == issue.location.end.line;
+
+    final detailedMessage = [
+      if (issue.verboseMessage != null) issue.verboseMessage!,
+      if (issue.suggestion != null) issue.suggestion!.comment,
+    ].join('\n');
+
+    return github.CheckRunAnnotation(
+      path: p.relative(
+        sourceAbsolutePath,
+        from: _workflowUtils.currentPathToRepoRoot(),
+      ),
+      startLine: issue.location.start.line,
+      endLine: issue.location.end.line,
+      startColumn: isSingleLineIssue ? issue.location.start.column : null,
+      endColumn: isSingleLineIssue ? issue.location.end.column : null,
+      annotationLevel: severityToAnnotationLevel(issue.severity),
+      message: detailedMessage.isNotEmpty ? detailedMessage : issue.message,
+      title: detailedMessage.isNotEmpty ? issue.message : '',
+    );
+  }
 
   github.CheckRunAnnotationLevel severityToAnnotationLevel(
     dcm.Severity severity,
