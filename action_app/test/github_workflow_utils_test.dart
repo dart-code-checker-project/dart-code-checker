@@ -43,6 +43,33 @@ void main() {
       );
     });
 
+    test('logErrorMessage logs passed message', () {
+      const message = 'simple message';
+      const path = '/project/lib/source.dart';
+
+      GitHubWorkflowUtils(output).logErrorMessage(message);
+      GitHubWorkflowUtils(output).logErrorMessage(message, file: path);
+      GitHubWorkflowUtils(output).logErrorMessage(message, line: 1);
+      GitHubWorkflowUtils(output).logErrorMessage(message, column: 2);
+      GitHubWorkflowUtils(output).logErrorMessage(
+        message,
+        file: path,
+        line: 1,
+        column: 2,
+      );
+
+      expect(
+        verify(() => output.writeln(captureAny())).captured,
+        equals([
+          '::error::simple message',
+          '::error file=/project/lib/source.dart::simple message',
+          '::error line=1::simple message',
+          '::error col=2::simple message',
+          '::error file=/project/lib/source.dart,line=1,col=2::simple message',
+        ]),
+      );
+    });
+
     test('logInfoMessage logs passed message', () {
       const message = 'simple message';
 
