@@ -3,6 +3,7 @@
         "CODECOV",
         "carryforward",
         "cyclomatic",
-        "lcov"
+        "lcov",
+        "mocktail"
     ]
 }
