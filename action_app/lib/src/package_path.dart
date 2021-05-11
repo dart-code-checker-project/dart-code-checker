@@ -10,6 +10,7 @@ class PackagePath {
   const PackagePath({required this.relativePath});
 
   /// Canonical path to the package to analyze
-  String get canonicalPackagePath =>
-      p.canonicalize('${GitHubWorkflowUtils().currentPathToRepoRoot()}/$relativePath');
+  String get canonicalPackagePath => p.canonicalize(
+        '${const GitHubWorkflowUtils().currentPathToRepoRoot()}/$relativePath',
+      );
 }
