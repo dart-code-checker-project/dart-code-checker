@@ -73,7 +73,7 @@ class Analysis {
       return;
     }
 
-    final workflowUtils = const GitHubWorkflowUtils()
+    final workflowUtils = GitHubWorkflowUtils(stdout)
       ..logDebugMessage("Checkrun cancelled. Conclusion is 'CANCELLED'.");
     await _client.checks.checkRuns.updateCheckRun(
       _repositorySlug,
