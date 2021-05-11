@@ -3,7 +3,7 @@ import 'dart:io';
 
 const _envVarGitHubWorkspace = 'GITHUB_WORKSPACE';
 
-class GithubWorkflowUtils {
+class GitHubWorkflowUtils {
   /// Returns head SHA of the commit associated to the current workflow
   String currentCommitSHA() {
     final commitSha = Platform.environment['GITHUB_SHA'] as String;

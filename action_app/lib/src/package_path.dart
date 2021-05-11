@@ -11,5 +11,5 @@ class PackagePath {
 
   /// Canonical path to the package to analyze
   String get canonicalPackagePath =>
-      p.canonicalize('${GithubWorkflowUtils().currentPathToRepoRoot()}/$relativePath');
+      p.canonicalize('${GitHubWorkflowUtils().currentPathToRepoRoot()}/$relativePath');
 }
