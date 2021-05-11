@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
@@ -11,6 +13,6 @@ class PackagePath {
 
   /// Canonical path to the package to analyze
   String get canonicalPackagePath => p.canonicalize(
-        '${const GitHubWorkflowUtils().currentPathToRepoRoot()}/$relativePath',
+        '${GitHubWorkflowUtils(stdout).currentPathToRepoRoot()}/$relativePath',
       );
 }

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:github/github.dart';
@@ -10,7 +11,7 @@ const _homePage = 'https://github.com/dart-code-checker/dart-code-metrics';
 
 class Analysis {
   static Future<Analysis> start(Arguments arguments) async {
-    const workflowUtils = GitHubWorkflowUtils();
+    final workflowUtils = GitHubWorkflowUtils(stdout);
 
     final client =
         GitHub(auth: Authentication.withToken(arguments.githubToken));

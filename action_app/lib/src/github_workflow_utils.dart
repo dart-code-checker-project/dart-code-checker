@@ -4,7 +4,9 @@ import 'dart:io';
 const _envVarGitHubWorkspace = 'GITHUB_WORKSPACE';
 
 class GitHubWorkflowUtils {
-  const GitHubWorkflowUtils();
+  final IOSink _output;
+
+  const GitHubWorkflowUtils(this._output);
 
   /// Returns head SHA of the commit associated to the current workflow
   String currentCommitSHA() {
@@ -80,7 +82,7 @@ class GitHubWorkflowUtils {
   }
 
   void logInfoMessage(String message) {
-    stdout.writeln(message);
+    _output.writeln(message);
   }
 
   /// Creates a warning message and prints the message to the log.
@@ -124,7 +126,7 @@ class GitHubWorkflowUtils {
       sb.write(message);
     }
 
-    stdout.writeln(sb.toString());
+    _output.writeln(sb.toString());
   }
 
 // ignore: long-parameter-list

@@ -39,7 +39,7 @@ class Arguments {
       );
     }
 
-    const workflowUtils = GitHubWorkflowUtils();
+    final workflowUtils = GitHubWorkflowUtils(stdout);
 
     return Arguments._(
       githubToken: _githubTokenInput.value,
