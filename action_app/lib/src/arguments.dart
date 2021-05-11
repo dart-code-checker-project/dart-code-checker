@@ -39,10 +39,12 @@ class Arguments {
       );
     }
 
+    final workflowUtils = GithubWorkflowUtils();
+
     return Arguments._(
       githubToken: _githubTokenInput.value,
-      commitSha: currentCommitSHA(),
-      repositorySlug: currentRepositorySlug(),
+      commitSha: workflowUtils.currentCommitSHA(),
+      repositorySlug: workflowUtils.currentRepositorySlug(),
       packagePath: packagePath,
     );
   }

@@ -10,14 +10,17 @@ const _homePage = 'https://github.com/dart-code-checker/dart-code-metrics';
 
 class Analysis {
   static Future<Analysis> start(Arguments arguments) async {
+    final workflowUtils = GithubWorkflowUtils();
+
     final client =
         GitHub(auth: Authentication.withToken(arguments.githubToken));
     final slug = RepositorySlug.full(arguments.repositorySlug);
     try {
       final id = '${Random().nextInt(1000)}';
-      final name = isTestMode() ? '$_checkRunName ($id)' : _checkRunName;
+      final name =
+          workflowUtils.isTestMode() ? '$_checkRunName ($id)' : _checkRunName;
 
-      logDebugMessage('Id attributed to checkrun: $id');
+      workflowUtils.logDebugMessage('Id attributed to checkrun: $id');
 
       final checkRun = await client.checks.checkRuns.createCheckRun(
         slug,
@@ -31,7 +34,7 @@ class Analysis {
       return Analysis._(client, checkRun, slug);
     } on GitHubError catch (e) {
       if (e.toString().contains('Resource not accessible by integration')) {
-        logWarningMessage(
+        workflowUtils.logWarningMessage(
           "It seems that this action doesn't have the required permissions to call the GitHub API with the token you gave. "
           "This can occur if this repository is a fork, as in that case GitHub reduces the GITHUB_TOKEN's permissions for security reasons. "
           'Consequently, no report will be made on GitHub.',
@@ -69,14 +72,15 @@ class Analysis {
       return;
     }
 
-    logDebugMessage("Checkrun cancelled. Conclusion is 'CANCELLED'.");
+    final workflowUtils = GithubWorkflowUtils()
+      ..logDebugMessage("Checkrun cancelled. Conclusion is 'CANCELLED'.");
     await _client.checks.checkRuns.updateCheckRun(
       _repositorySlug,
       _checkRun!,
       startedAt: _startTime,
       completedAt: DateTime.now(),
       status: CheckRunStatus.completed,
-      conclusion: isTestMode()
+      conclusion: workflowUtils.isTestMode()
           ? CheckRunConclusion.neutral
           : CheckRunConclusion.cancelled,
       output: CheckRunOutput(
