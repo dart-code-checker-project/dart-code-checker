@@ -80,5 +80,32 @@ void main() {
         equals([message]),
       );
     });
+
+    test('logWarningMessage logs passed message', () {
+      const message = 'simple message';
+      const path = '/project/lib/source.dart';
+
+      GitHubWorkflowUtils(output).logWarningMessage(message);
+      GitHubWorkflowUtils(output).logWarningMessage(message, file: path);
+      GitHubWorkflowUtils(output).logWarningMessage(message, line: 1);
+      GitHubWorkflowUtils(output).logWarningMessage(message, column: 2);
+      GitHubWorkflowUtils(output).logWarningMessage(
+        message,
+        file: path,
+        line: 1,
+        column: 2,
+      );
+
+      expect(
+        verify(() => output.writeln(captureAny())).captured,
+        equals([
+          '::warning::simple message',
+          '::warning file=/project/lib/source.dart::simple message',
+          '::warning line=1::simple message',
+          '::warning col=2::simple message',
+          '::warning file=/project/lib/source.dart,line=1,col=2::simple message',
+        ]),
+      );
+    });
   });
 }
