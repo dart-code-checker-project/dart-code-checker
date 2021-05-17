@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:meta/meta.dart';
+
 const _unknownPackageName = 'unknown';
 
 const _packageNameKey = 'name:';
 
+@immutable
 class PubSpecUtils {
   final Iterable<String> _content;
 
@@ -18,4 +23,12 @@ class PubSpecUtils {
 
     return _unknownPackageName;
   }
+}
+
+PubSpecUtils pubspec(String canonicalPackagePath) {
+  final pubspec = File('$canonicalPackagePath/pubspec.yaml');
+  final pubspecContent =
+      pubspec.existsSync() ? pubspec.readAsLinesSync() : <String>[];
+
+  return PubSpecUtils(pubspecContent);
 }
