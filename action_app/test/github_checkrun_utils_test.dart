@@ -67,6 +67,7 @@ void main() {
         expect(annotation.title, isEmpty);
         expect(annotation.rawDetails, isNull);
       });
+
       test('github annotation from dart_code_metrics single line issue', () {
         final utils = GitHubCheckRunUtils(workflowUtilsMock);
 

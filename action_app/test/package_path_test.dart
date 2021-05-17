@@ -3,8 +3,9 @@ import 'package:dart_code_metrics_github_action_app/src/package_path.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('PackagePath', () {
-    test('canonicalPackagePath returns canonized path to the package', () {
+  test(
+    'PackagePath canonicalPackagePath returns canonized path to the package',
+    () {
       const pathToRepoRoot = '/home/builder/git';
 
       expect(
@@ -19,6 +20,6 @@ void main() {
             .canonicalPackagePath,
         equals('/home/builder/git'),
       );
-    });
-  });
+    },
+  );
 }
