@@ -4,6 +4,10 @@ import 'dart:io';
 import 'github_action_input.dart';
 
 const _envVarGitHubWorkspace = 'GITHUB_WORKSPACE';
+const _envVarGitHubRepositorySlug = 'GITHUB_REPOSITORY';
+
+const _checkOutError =
+    "Make sure you call 'actions/checkout' in a previous step. Invalid environment variable";
 
 class GitHubWorkflowUtils {
   final Map<String, String> _environmentVariables;
@@ -59,8 +63,18 @@ class GitHubWorkflowUtils {
   }
 
   /// Returns slug of the repository
-  String currentRepositorySlug() =>
-      _environmentVariables['GITHUB_REPOSITORY'] as String;
+  String currentRepositorySlug() {
+    final repoPath = _environmentVariables[_envVarGitHubRepositorySlug];
+    if (repoPath == null) {
+      throw ArgumentError.value(
+        repoPath,
+        _envVarGitHubRepositorySlug,
+        _checkOutError,
+      );
+    }
+
+    return repoPath;
+  }
 
   /// Path to the folder containing the entire repository
   String currentPathToRepoRoot() {
@@ -69,7 +83,7 @@ class GitHubWorkflowUtils {
       throw ArgumentError.value(
         repoPath,
         _envVarGitHubWorkspace,
-        "Make sure you call 'actions/checkout' in a previous step. Invalid environment variable",
+        _checkOutError,
       );
     }
 
