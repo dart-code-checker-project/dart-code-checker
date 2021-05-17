@@ -4,17 +4,11 @@ import 'github_action_input.dart';
 import 'github_workflow_utils.dart';
 import 'package_path.dart';
 
-const _githubTokenInput = GitHubActionInput(
-  'githubToken',
-  isRequired: true,
-  canBeEmpty: false,
-);
+const _githubTokenInput =
+    GitHubActionInput('githubToken', isRequired: true, canBeEmpty: false);
 
-const _packagePathInput = GitHubActionInput(
-  'relativePath',
-  isRequired: false,
-  canBeEmpty: true,
-);
+const _packagePathInput =
+    GitHubActionInput('relativePath', isRequired: false, canBeEmpty: true);
 
 class Arguments {
   /// Token to call the GitHub API
@@ -28,12 +22,7 @@ class Arguments {
 
   final PackagePath packagePath;
 
-  factory Arguments() {
-    final workflowUtils = GitHubWorkflowUtils(
-      environmentVariables: Platform.environment,
-      output: stdout,
-    );
-
+  factory Arguments(GitHubWorkflowUtils workflowUtils) {
     final packagePath = PackagePath(
       pathToRepoRoot: workflowUtils.currentPathToRepoRoot(),
       relativePath: workflowUtils.actionInputValue(_packagePathInput),
