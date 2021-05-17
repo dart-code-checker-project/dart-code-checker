@@ -4,13 +4,13 @@ import 'github_action_input.dart';
 import 'github_workflow_utils.dart';
 import 'package_path.dart';
 
-const _githubTokenInput = ActionInput(
+const _githubTokenInput = GitHubActionInput(
   'githubToken',
   isRequired: true,
   canBeEmpty: false,
 );
 
-const _packagePathInput = ActionInput(
+const _packagePathInput = GitHubActionInput(
   'relativePath',
   isRequired: false,
   canBeEmpty: true,
@@ -29,23 +29,26 @@ class Arguments {
   final PackagePath packagePath;
 
   factory Arguments() {
-    final workflowUtils = GitHubWorkflowUtils(stdout);
+    final workflowUtils = GitHubWorkflowUtils(
+      environmentVariables: Platform.environment,
+      output: stdout,
+    );
 
     final packagePath = PackagePath(
       workflowUtils: workflowUtils,
-      relativePath: _packagePathInput.value,
+      relativePath: workflowUtils.actionInputValue(_packagePathInput),
     );
 
     if (!Directory(packagePath.canonicalPackagePath).existsSync()) {
       throw ArgumentError.value(
         packagePath.canonicalPackagePath,
-        _packagePathInput.value,
+        workflowUtils.actionInputValue(_packagePathInput),
         "This directory doesn't exist in your repository",
       );
     }
 
     return Arguments._(
-      githubToken: _githubTokenInput.value,
+      githubToken: workflowUtils.actionInputValue(_githubTokenInput),
       commitSha: workflowUtils.currentCommitSHA(),
       repositorySlug: workflowUtils.currentRepositorySlug(),
       packagePath: packagePath,

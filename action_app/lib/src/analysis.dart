@@ -11,7 +11,10 @@ const _homePage = 'https://github.com/dart-code-checker/dart-code-metrics';
 
 class Analysis {
   static Future<Analysis> start(Arguments arguments) async {
-    final workflowUtils = GitHubWorkflowUtils(stdout);
+    final workflowUtils = GitHubWorkflowUtils(
+      environmentVariables: Platform.environment,
+      output: stdout,
+    );
 
     final client =
         GitHub(auth: Authentication.withToken(arguments.githubToken));
@@ -73,8 +76,10 @@ class Analysis {
       return;
     }
 
-    final workflowUtils = GitHubWorkflowUtils(stdout)
-      ..logDebugMessage("Checkrun cancelled. Conclusion is 'CANCELLED'.");
+    final workflowUtils = GitHubWorkflowUtils(
+      environmentVariables: Platform.environment,
+      output: stdout,
+    )..logDebugMessage("Checkrun cancelled. Conclusion is 'CANCELLED'.");
     await _client.checks.checkRuns.updateCheckRun(
       _repositorySlug,
       _checkRun!,

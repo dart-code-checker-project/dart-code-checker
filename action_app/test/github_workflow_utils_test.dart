@@ -1,6 +1,7 @@
 @TestOn('vm')
 import 'dart:io';
 
+import 'package:dart_code_metrics_github_action_app/src/github_action_input.dart';
 import 'package:dart_code_metrics_github_action_app/src/github_workflow_utils.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -16,15 +17,98 @@ void main() {
       output = IOSinkMock();
     });
 
+    group('actionInputValue', () {
+      late GitHubWorkflowUtils workflow;
+
+      setUp(() {
+        workflow = GitHubWorkflowUtils(
+          environmentVariables: {
+            'INPUT_GITHUB_TOKEN': '02468A',
+            'INPUT_EMPTY': '',
+          },
+          output: output,
+        );
+      });
+
+      test('throws ArgumentError for uninitialized input', () {
+        expect(
+          () {
+            workflow.actionInputValue(const GitHubActionInput(
+              'token',
+              isRequired: true,
+              canBeEmpty: false,
+            ));
+          },
+          throwsArgumentError,
+        );
+
+        expect(
+          () {
+            workflow.actionInputValue(const GitHubActionInput(
+              'token',
+              isRequired: false,
+              canBeEmpty: false,
+            ));
+          },
+          throwsArgumentError,
+        );
+
+        expect(
+          () {
+            workflow.actionInputValue(const GitHubActionInput(
+              'empty',
+              isRequired: false,
+              canBeEmpty: false,
+            ));
+          },
+          throwsArgumentError,
+        );
+      });
+
+      test('returns input value', () {
+        expect(
+          workflow.actionInputValue(const GitHubActionInput(
+            'github token',
+            isRequired: true,
+            canBeEmpty: false,
+          )),
+          equals('02468A'),
+        );
+
+        expect(
+          workflow.actionInputValue(const GitHubActionInput(
+            'token',
+            isRequired: false,
+            canBeEmpty: true,
+          )),
+          isEmpty,
+        );
+
+        expect(
+          workflow.actionInputValue(const GitHubActionInput(
+            'empty',
+            isRequired: true,
+            canBeEmpty: true,
+          )),
+          isEmpty,
+        );
+      });
+    });
+
     test('logDebugMessage logs passed message', () {
       const message = 'simple message';
       const path = '/project/lib/source.dart';
 
-      GitHubWorkflowUtils(output).logDebugMessage(message);
-      GitHubWorkflowUtils(output).logDebugMessage(message, file: path);
-      GitHubWorkflowUtils(output).logDebugMessage(message, line: 1);
-      GitHubWorkflowUtils(output).logDebugMessage(message, column: 2);
-      GitHubWorkflowUtils(output).logDebugMessage(
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logDebugMessage(message);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logDebugMessage(message, file: path);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logDebugMessage(message, line: 1);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logDebugMessage(message, column: 2);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logDebugMessage(
         message,
         file: path,
         line: 1,
@@ -47,11 +131,16 @@ void main() {
       const message = 'simple message';
       const path = '/project/lib/source.dart';
 
-      GitHubWorkflowUtils(output).logErrorMessage(message);
-      GitHubWorkflowUtils(output).logErrorMessage(message, file: path);
-      GitHubWorkflowUtils(output).logErrorMessage(message, line: 1);
-      GitHubWorkflowUtils(output).logErrorMessage(message, column: 2);
-      GitHubWorkflowUtils(output).logErrorMessage(
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logErrorMessage(message);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logErrorMessage(message, file: path);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logErrorMessage(message, line: 1);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logErrorMessage(message, column: 2);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logErrorMessage(
         message,
         file: path,
         line: 1,
@@ -73,7 +162,8 @@ void main() {
     test('logInfoMessage logs passed message', () {
       const message = 'simple message';
 
-      GitHubWorkflowUtils(output).logInfoMessage(message);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logInfoMessage(message);
 
       expect(
         verify(() => output.writeln(captureAny())).captured,
@@ -85,11 +175,16 @@ void main() {
       const message = 'simple message';
       const path = '/project/lib/source.dart';
 
-      GitHubWorkflowUtils(output).logWarningMessage(message);
-      GitHubWorkflowUtils(output).logWarningMessage(message, file: path);
-      GitHubWorkflowUtils(output).logWarningMessage(message, line: 1);
-      GitHubWorkflowUtils(output).logWarningMessage(message, column: 2);
-      GitHubWorkflowUtils(output).logWarningMessage(
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logWarningMessage(message);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logWarningMessage(message, file: path);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logWarningMessage(message, line: 1);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logWarningMessage(message, column: 2);
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .logWarningMessage(
         message,
         file: path,
         line: 1,

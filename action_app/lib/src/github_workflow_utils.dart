@@ -1,19 +1,41 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'github_action_input.dart';
+
 const _envVarGitHubWorkspace = 'GITHUB_WORKSPACE';
 
 class GitHubWorkflowUtils {
+  final Map<String, String> _environmentVariables;
   final IOSink _output;
 
-  const GitHubWorkflowUtils(this._output);
+  const GitHubWorkflowUtils({
+    required Map<String, String> environmentVariables,
+    required IOSink output,
+  })  : _environmentVariables = environmentVariables,
+        _output = output;
+
+  /// Will throw an [ArgumentError] if the [input] is required and the value is
+  /// null or if the value is an empty string and input canBeEmpty is false.
+  String actionInputValue(GitHubActionInput input) {
+    final key = 'INPUT_${input.name.toUpperCase().replaceAll(" ", "_")}';
+    final value = _environmentVariables[key];
+    if ((value == null && input.isRequired) ||
+        ((value == null || value.isEmpty) && !input.canBeEmpty)) {
+      throw ArgumentError(
+        "No value was given for the argument '${input.name}'.",
+      );
+    }
+
+    return value ?? '';
+  }
 
   /// Returns head SHA of the commit associated to the current workflow
   String currentCommitSHA() {
-    final commitSha = Platform.environment['GITHUB_SHA'] as String;
+    final commitSha = _environmentVariables['GITHUB_SHA'] as String;
     logDebugMessage('SHA that triggered the workflow: $commitSha');
 
-    final pathEventPayload = Platform.environment['GITHUB_EVENT_PATH'];
+    final pathEventPayload = _environmentVariables['GITHUB_EVENT_PATH'];
     if (pathEventPayload != null) {
       final eventPayload = jsonDecode(File(pathEventPayload).readAsStringSync())
           as Map<String, dynamic>;
@@ -38,11 +60,11 @@ class GitHubWorkflowUtils {
 
   /// Returns slug of the repository
   String currentRepositorySlug() =>
-      Platform.environment['GITHUB_REPOSITORY'] as String;
+      _environmentVariables['GITHUB_REPOSITORY'] as String;
 
   /// Path to the folder containing the entire repository
   String currentPathToRepoRoot() {
-    final repoPath = Platform.environment[_envVarGitHubWorkspace];
+    final repoPath = _environmentVariables[_envVarGitHubWorkspace];
     if (repoPath == null) {
       throw ArgumentError.value(
         repoPath,
