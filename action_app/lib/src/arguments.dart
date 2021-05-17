@@ -29,7 +29,12 @@ class Arguments {
   final PackagePath packagePath;
 
   factory Arguments() {
-    final packagePath = PackagePath(relativePath: _packagePathInput.value);
+    final workflowUtils = GitHubWorkflowUtils(stdout);
+
+    final packagePath = PackagePath(
+      workflowUtils: workflowUtils,
+      relativePath: _packagePathInput.value,
+    );
 
     if (!Directory(packagePath.canonicalPackagePath).existsSync()) {
       throw ArgumentError.value(
@@ -38,8 +43,6 @@ class Arguments {
         "This directory doesn't exist in your repository",
       );
     }
-
-    final workflowUtils = GitHubWorkflowUtils(stdout);
 
     return Arguments._(
       githubToken: _githubTokenInput.value,
