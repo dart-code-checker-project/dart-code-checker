@@ -202,5 +202,15 @@ void main() {
         ]),
       );
     });
+
+    test('startLogGroup logs command about start grouping log messages', () {
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .startLogGroup('group name');
+
+      expect(
+        verify(() => output.writeln(captureAny())).captured.single,
+        equals('::group::group name'),
+      );
+    });
   });
 }
