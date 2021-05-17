@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 
 import 'github_workflow_utils.dart';
+import 'pubspec_utils.dart';
 
 @immutable
 class PackagePath {
@@ -17,4 +20,12 @@ class PackagePath {
   /// Canonical path to the package to analyze
   String get canonicalPackagePath => p
       .canonicalize('${_workflowUtils.currentPathToRepoRoot()}/$_relativePath');
+
+  String get packageName {
+    final pubspec = File('$canonicalPackagePath/pubspec.yaml');
+    final pubspecContent =
+        pubspec.existsSync() ? pubspec.readAsLinesSync() : <String>[];
+
+    return PubSpecUtils(pubspecContent).packageName;
+  }
 }
