@@ -20,8 +20,10 @@ void main() {
           'publish_to: none',
         ]);
 
-        expect(pubSpecUtils.packageName,
-            equals('dart_code_metrics_github_action_app'));
+        expect(
+          pubSpecUtils.packageName,
+          equals('dart_code_metrics_github_action_app'),
+        );
       });
     });
   });
