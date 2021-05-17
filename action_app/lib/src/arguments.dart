@@ -35,7 +35,7 @@ class Arguments {
     );
 
     final packagePath = PackagePath(
-      workflowUtils: workflowUtils,
+      pathToRepoRoot: workflowUtils.currentPathToRepoRoot(),
       relativePath: workflowUtils.actionInputValue(_packagePathInput),
     );
 
