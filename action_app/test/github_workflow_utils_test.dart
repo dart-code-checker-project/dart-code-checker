@@ -115,6 +115,26 @@ void main() {
       );
     });
 
+    test('currentPathToRepoRoot returns workspase path', () {
+      expect(
+        () {
+          GitHubWorkflowUtils(environmentVariables: {}, output: output)
+              .currentPathToRepoRoot();
+        },
+        throwsArgumentError,
+      );
+
+      const path = '/user/builder/repository';
+
+      expect(
+        GitHubWorkflowUtils(
+          environmentVariables: {'GITHUB_WORKSPACE': path},
+          output: output,
+        ).currentPathToRepoRoot(),
+        equals(path),
+      );
+    });
+
     test('logDebugMessage logs passed message', () {
       const message = 'simple message';
       const path = '/project/lib/source.dart';
