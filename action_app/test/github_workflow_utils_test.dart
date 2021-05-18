@@ -95,26 +95,29 @@ void main() {
       });
     });
 
-    group('currentCommitSHA returns run commit sha', () {
-      test('taken from head', () {
-        expect(
-          () {
-            GitHubWorkflowUtils(environmentVariables: {}, output: output)
-                .currentCommitSHA();
-          },
-          throwsArgumentError,
-        );
+    test('currentCommitSHA returns run commit sha taken from head', () {
+      expect(
+        () {
+          GitHubWorkflowUtils(environmentVariables: {}, output: output)
+              .currentCommitSHA();
+        },
+        throwsArgumentError,
+      );
 
-        const sha = '1357908642';
+      const branchHeadSHA = '1357908642';
 
-        expect(
-          GitHubWorkflowUtils(
-            environmentVariables: {'GITHUB_SHA': sha},
-            output: output,
-          ).currentCommitSHA(),
-          equals(sha),
-        );
-      });
+      expect(
+        GitHubWorkflowUtils(
+          environmentVariables: {'GITHUB_SHA': branchHeadSHA},
+          output: output,
+        ).currentCommitSHA(),
+        equals(branchHeadSHA),
+      );
+
+      expect(
+        verify(() => output.writeln(captureAny())).captured.single,
+        equals('::debug::SHA that triggered the workflow: 1357908642'),
+      );
     });
 
     test('currentRepositorySlug returns defined slug of the repository', () {
