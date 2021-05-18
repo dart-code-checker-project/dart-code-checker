@@ -9,7 +9,7 @@ void main() {
 
       expect(pubSpecUtils.packageName, equals('unknown'));
     });
-    
+
     test('package name', () {
       const pubSpecUtils = PubSpecUtils([
         'name: dart_code_metrics_github_action_app',
