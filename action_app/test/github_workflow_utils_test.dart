@@ -262,5 +262,25 @@ void main() {
         equals('::endgroup::'),
       );
     });
+
+    test('isTestMode returns true only for current repo', () {
+      const slug = 'dart-code-checker/run-dart-code-metrics-action';
+
+      expect(
+        GitHubWorkflowUtils(
+          environmentVariables: {'GITHUB_REPOSITORY': slug},
+          output: output,
+        ).isTestMode(),
+        isTrue,
+      );
+
+      expect(
+        GitHubWorkflowUtils(
+          environmentVariables: {'GITHUB_REPOSITORY': 'slug'},
+          output: output,
+        ).isTestMode(),
+        isFalse,
+      );
+    });
   });
 }
