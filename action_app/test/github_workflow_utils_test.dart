@@ -252,5 +252,15 @@ void main() {
         equals('::group::group name'),
       );
     });
+
+    test('endLogGroup logs command about end grouping log messages', () {
+      GitHubWorkflowUtils(environmentVariables: {}, output: output)
+          .endLogGroup();
+
+      expect(
+        verify(() => output.writeln(captureAny())).captured.single,
+        equals('::endgroup::'),
+      );
+    });
   });
 }
