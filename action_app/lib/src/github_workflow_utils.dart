@@ -5,6 +5,7 @@ import 'github_action_input.dart';
 
 const _envVarGitHubWorkspace = 'GITHUB_WORKSPACE';
 const _envVarGitHubRepositorySlug = 'GITHUB_REPOSITORY';
+const _envVarGitHubSHA = 'GITHUB_SHA';
 
 const _checkOutError =
     "Make sure you call 'actions/checkout' in a previous step. Invalid environment variable";
@@ -36,7 +37,15 @@ class GitHubWorkflowUtils {
 
   /// Returns head SHA of the commit associated to the current workflow
   String currentCommitSHA() {
-    final commitSha = _environmentVariables['GITHUB_SHA'] as String;
+    final commitSha = _environmentVariables[_envVarGitHubSHA];
+    if (commitSha == null) {
+      throw ArgumentError.value(
+        commitSha,
+        _envVarGitHubRepositorySlug,
+        _checkOutError,
+      );
+    }
+
     logDebugMessage('SHA that triggered the workflow: $commitSha');
 
     final pathEventPayload = _environmentVariables['GITHUB_EVENT_PATH'];

@@ -95,6 +95,28 @@ void main() {
       });
     });
 
+    group('currentCommitSHA returns run commit sha', () {
+      test('taken from head', () {
+        expect(
+          () {
+            GitHubWorkflowUtils(environmentVariables: {}, output: output)
+                .currentCommitSHA();
+          },
+          throwsArgumentError,
+        );
+
+        const sha = '1357908642';
+
+        expect(
+          GitHubWorkflowUtils(
+            environmentVariables: {'GITHUB_SHA': sha},
+            output: output,
+          ).currentCommitSHA(),
+          equals(sha),
+        );
+      });
+    });
+
     test('currentRepositorySlug returns defined slug of the repository', () {
       expect(
         () {
