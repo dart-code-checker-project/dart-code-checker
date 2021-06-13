@@ -3,11 +3,13 @@
         "CODECOV",
         "carryforward",
         "cyclomatic",
+        "dartcodemetrics",
         "interps",
         "ints",
         "lcov",
-        "multiline",
+        "markdownlint",
         "mocktail",
+        "multiline",
         "todos"
     ]
 }
