@@ -120,6 +120,14 @@ void main() {
       );
     });
 
+    test('currentPullRequestNumber returns null', () {
+      expect(
+        GitHubWorkflowUtils(environmentVariables: {}, output: output)
+            .currentPullRequestNumber(),
+        isNull,
+      );
+    });
+
     test('currentRepositorySlug returns defined slug of the repository', () {
       expect(
         () {

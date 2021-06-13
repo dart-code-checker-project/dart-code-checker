@@ -65,6 +65,17 @@ class GitHubWorkflowUtils {
     return commitSha;
   }
 
+  /// Returns number of current Pull Request or null
+  int? currentPullRequestNumber() {
+    final pullRequest = _getPullRequestJson();
+    if (pullRequest != null && pullRequest.containsKey('number')) {
+      return pullRequest['number'] as int;
+    }
+
+    // ignore: avoid_returning_null
+    return null;
+  }
+
   /// Returns slug of the repository
   String currentRepositorySlug() {
     final repoPath = _environmentVariables[_envVarGitHubRepositorySlug];
