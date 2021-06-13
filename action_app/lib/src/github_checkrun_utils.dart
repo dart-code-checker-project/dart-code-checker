@@ -1,7 +1,9 @@
 // ignore: implementation_imports
-import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/issue.dart' as dcm;
+import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/issue.dart'
+    as dcm;
 // ignore: implementation_imports
-import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/severity.dart' as dcm;
+import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/severity.dart'
+    as dcm;
 import 'package:github/github.dart' as github;
 import 'package:path/path.dart' as p;
 
