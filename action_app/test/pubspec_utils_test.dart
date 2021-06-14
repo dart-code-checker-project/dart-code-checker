@@ -1,5 +1,5 @@
 @TestOn('vm')
-import 'package:dart_code_metrics_github_action_app/src/pubspec_utils.dart';
+import 'package:action_app/src/pubspec_utils.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -12,7 +12,7 @@ void main() {
 
     test('package name', () {
       const pubSpecUtils = PubSpecUtils([
-        'name: dart_code_metrics_github_action_app',
+        'name: action_app',
         'version: 1.0.0',
         'description: Github action app that helps to run dart_code_metrics in CI/CD flow.',
         'homepage: https://github.com/dart-code-checker/dart-code-metrics-action',
@@ -22,7 +22,7 @@ void main() {
 
       expect(
         pubSpecUtils.packageName,
-        equals('dart_code_metrics_github_action_app'),
+        equals('action_app'),
       );
     });
   });

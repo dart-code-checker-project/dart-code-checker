@@ -1,10 +1,11 @@
-name: test
+name: Test action app
 
 on: [push, pull_request]
 
 env:
-  INPUT_GITHUBTOKEN: ${{ secrets.GITHUB_TOKEN }}
-  INPUT_RELATIVEPATH: "action_app"
+  INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  INPUT_FOLDERS: "bin, lib"
+  INPUT_RELATIVE_PATH: "action_app"
 
 jobs:
   test:

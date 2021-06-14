@@ -1,8 +1,8 @@
 @TestOn('vm')
 import 'dart:io';
 
-import 'package:dart_code_metrics_github_action_app/src/github_action_input.dart';
-import 'package:dart_code_metrics_github_action_app/src/github_workflow_utils.dart';
+import 'package:action_app/src/github_action_input.dart';
+import 'package:action_app/src/github_workflow_utils.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 

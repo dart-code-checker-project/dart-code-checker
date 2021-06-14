@@ -1,6 +1,8 @@
 import 'dart:math';
 
 // ignore: implementation_imports
+import 'package:dart_code_metrics/src/analyzers/lint_analyzer/metrics/metrics_list/cyclomatic_complexity/cyclomatic_complexity_metric.dart';
+// ignore: implementation_imports
 import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/lint_file_report.dart';
 // ignore: implementation_imports
 import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/severity.dart';
@@ -13,6 +15,8 @@ import 'github_workflow_utils.dart';
 
 const _checkRunName = 'Dart Code Metrics report';
 const _homePage = 'https://github.com/dart-code-checker/dart-code-metrics';
+
+const _sourceLinesOfCodeMetricId = 'source-lines-of-code';
 
 class Reporter {
   static Future<Reporter> create({
@@ -80,8 +84,9 @@ class Reporter {
   }
 
   Future<void> complete(
-    Iterable<LintFileReport> report,
     String packageName,
+    Iterable<String> scannedFolder,
+    Iterable<LintFileReport> report,
   ) async {
     if (_checkRun == null) {
       return;
@@ -98,16 +103,16 @@ class Reporter {
 
     final title = _generateTitle(packageName);
 
+    final name = StringBuffer('Analysis of $packageName');
     final summary = StringBuffer();
     if (_workflowUtils.isTestMode()) {
+      name.write(' (${_checkRun?.externalId})');
       summary
         ..writeln('**THIS ACTION HAS BEEN EXECUTED IN TEST MODE.**')
         ..writeln('**Conclusion = `$conclusion`**');
     }
 
-    summary.write(_generateSummary());
-
-    final details = _generateDetails();
+    summary.write(_generateSummary(scannedFolder, report));
 
     final checkRun = await _client.checks.checkRuns.updateCheckRun(
       _repositorySlug,
@@ -120,7 +125,6 @@ class Reporter {
       output: CheckRunOutput(
         title: title,
         summary: summary.toString(),
-        text: details,
         annotations: report
             .map(
               (file) => [...file.issues, ...file.antiPatternCases].map(
@@ -165,9 +169,79 @@ class Reporter {
   }
 
   String _generateTitle(String packageName) =>
-      '$packageName package analysis results';
+      'Analysis result for $packageName';
 
-  String _generateDetails() => 'Detailed report';
+  String _generateSummary(
+    Iterable<String> scannedFolders,
+    Iterable<LintFileReport> report,
+  ) {
+    final issuesCount = report.fold<int>(
+      0,
+      (prevValue, fileReport) =>
+          prevValue +
+          fileReport.issues.length +
+          fileReport.antiPatternCases.length,
+    );
 
-  String _generateSummary() => '';
+    final totalSLOC = report.fold<num>(
+      0,
+      (prevValue, fileReport) =>
+          prevValue +
+          fileReport.functions.values.fold(
+            0,
+            (prevValue, functionReport) =>
+                prevValue +
+                (functionReport.metric(_sourceLinesOfCodeMetricId)?.value ?? 0),
+          ),
+    );
+
+    final totalClasses = report.fold<int>(
+      0,
+      (prevValue, fileReport) => prevValue + fileReport.classes.keys.length,
+    );
+
+    final totalFunctions = report.fold<int>(
+      0,
+      (prevValue, fileReport) => prevValue + fileReport.functions.keys.length,
+    );
+
+    final totalCyclomatic = report.fold<num>(
+      0,
+      (prevValue, fileReport) =>
+          prevValue +
+          fileReport.functions.values.fold(
+            0,
+            (prevValue, functionReport) =>
+                prevValue +
+                (functionReport
+                        .metric(CyclomaticComplexityMetric.metricId)
+                        ?.value ??
+                    0),
+          ),
+    );
+
+    final buffer = StringBuffer()..writeln('## Summary')..writeln();
+    if (scannedFolders.isNotEmpty) {
+      buffer.writeln(
+        scannedFolders.length == 1
+            ? '* Scanned package folder: ${scannedFolders.single}'
+            : '* Scanned package folders: ${scannedFolders.join(', ')}',
+      );
+    }
+
+    buffer
+      ..writeln('* Total scanned files: ${report.length}')
+      ..writeln('* Total lines of source code: $totalSLOC')
+      ..writeln('* Total classes: $totalClasses')
+      ..writeln()
+      ..writeln(
+        '* Average Cyclomatic Number per line of code: ${(totalCyclomatic / totalSLOC).toStringAsFixed(2)}',
+      )
+      ..writeln(
+        '* Average Source Lines of Code per method: ${totalSLOC ~/ totalFunctions}',
+      )
+      ..writeln('* Found issues: $issuesCount ${issuesCount > 0 ? '⚠' : '✅'}');
+
+    return buffer.toString();
+  }
 }

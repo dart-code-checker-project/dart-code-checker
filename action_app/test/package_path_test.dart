@@ -1,5 +1,5 @@
 @TestOn('vm')
-import 'package:dart_code_metrics_github_action_app/src/package_path.dart';
+import 'package:action_app/src/package_path.dart';
 import 'package:test/test.dart';
 
 void main() {

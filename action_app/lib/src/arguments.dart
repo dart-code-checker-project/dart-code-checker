@@ -8,10 +8,10 @@ const _foldersInput =
     GitHubActionInput('folders', isRequired: false, canBeEmpty: true);
 
 const _githubTokenInput =
-    GitHubActionInput('githubToken', isRequired: true, canBeEmpty: false);
+    GitHubActionInput('github_token', isRequired: true, canBeEmpty: false);
 
 const _packagePathInput =
-    GitHubActionInput('relativePath', isRequired: false, canBeEmpty: true);
+    GitHubActionInput('relative_path', isRequired: false, canBeEmpty: true);
 
 const _defaultFolders = ['lib'];
 

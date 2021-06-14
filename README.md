@@ -42,6 +42,21 @@ jobs:
 
 | Name | Required | Description | Default |
 | :--- | :--- | :--- | :--- |
-| **githubToken**  | ☑️ | Required to post a report on GitHub. *Note:* the secret [`GITHUB_TOKEN`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token) is already provided by GitHub and you don't have to set it up yourself. | |
+| **github_token**  | ☑️ | Required to post a report on GitHub. *Note:* the secret [`GITHUB_TOKEN`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token) is already provided by GitHub and you don't have to set it up yourself. | |
 | **folders** | | List of folders whose contents will be scanned. | [`lib`] |
-| **relativePath** | | If your package isn't at the root of the repository, set this input to indicate its location. | |
+| **relative_path** | | If your package isn't at the root of the repository, set this input to indicate its location. | |
+
+### Output Example
+
+* Check run output:
+  <img
+  src="https://raw.githubusercontent.com/dart-code-checker/dart-code-metrics-action/master/doc/.assets/annotation.png"
+  alt="annotation"
+  height="1216" width="394"
+  align="center">
+* Annotation:
+  <img
+  src="https://raw.githubusercontent.com/dart-code-checker/dart-code-metrics-action/master/doc/.assets/annotation.png"
+  alt="annotation"
+  height="1216" width="394"
+  align="center">

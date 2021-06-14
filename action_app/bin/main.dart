@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:action_app/action_app.dart';
 import 'package:dart_code_metrics/config.dart';
 import 'package:dart_code_metrics/metrics_analyzer.dart';
-import 'package:dart_code_metrics_github_action_app/action_app.dart';
 
 Future<void> main() async {
   final workflowUtils = GitHubWorkflowUtils(
@@ -30,7 +30,11 @@ Future<void> main() async {
     final result = await const LintAnalyzer()
         .runCliAnalysis(foldersToAnalyze, rootFolder, lintConfig);
 
-    await reporting.complete(result, pubspec(rootFolder).packageName);
+    await reporting.complete(
+      pubspec(rootFolder).packageName,
+      foldersToAnalyze,
+      result,
+    );
   } on Exception catch (cause) {
     try {
       await reporting.cancel(cause: cause);
