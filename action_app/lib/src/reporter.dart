@@ -1,8 +1,14 @@
 import 'dart:math';
 
+// ignore: implementation_imports
+import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/lint_file_report.dart';
+// ignore: implementation_imports
+import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/severity.dart';
+
 import 'package:github/github.dart';
 
 import 'arguments.dart';
+import 'github_checkrun_utils.dart';
 import 'github_workflow_utils.dart';
 
 const _checkRunName = 'Dart Code Metrics report';
@@ -73,6 +79,65 @@ class Reporter {
     );
   }
 
+  Future<void> complete(
+    Iterable<LintFileReport> report,
+    String packageName,
+  ) async {
+    if (_checkRun == null) {
+      return;
+    }
+
+    final checkRunUtils = GitHubCheckRunUtils(_workflowUtils);
+
+    final conclusion = report.any((file) => [
+              ...file.antiPatternCases,
+              ...file.issues,
+            ].any((issue) => issue.severity != Severity.none))
+        ? CheckRunConclusion.failure
+        : CheckRunConclusion.success;
+
+    final title = _generateTitle(packageName);
+
+    final summary = StringBuffer();
+    if (_workflowUtils.isTestMode()) {
+      summary
+        ..writeln('**THIS ACTION HAS BEEN EXECUTED IN TEST MODE.**')
+        ..writeln('**Conclusion = `$conclusion`**');
+    }
+
+    summary.write(_generateSummary());
+
+    final details = _generateDetails();
+
+    final checkRun = await _client.checks.checkRuns.updateCheckRun(
+      _repositorySlug,
+      _checkRun!,
+      status: CheckRunStatus.completed,
+      startedAt: _startTime,
+      completedAt: DateTime.now(),
+      conclusion:
+          _workflowUtils.isTestMode() ? CheckRunConclusion.neutral : conclusion,
+      output: CheckRunOutput(
+        title: title,
+        summary: summary.toString(),
+        text: details,
+        annotations: report
+            .map(
+              (file) => [...file.issues, ...file.antiPatternCases].map(
+                (issue) => checkRunUtils.issueToAnnotation(file.path, issue),
+              ),
+            )
+            .expand((issues) => issues)
+            .toList(),
+      ),
+    );
+
+    _workflowUtils
+      ..logInfoMessage('Check Run Id: ${checkRun.id}')
+      ..logInfoMessage('Check Suite Id: ${checkRun.checkSuiteId}')
+      ..logInfoMessage('Report posted at: ${checkRun.detailsUrl}');
+  }
+
   Future<void> cancel({required Exception cause}) async {
     if (_checkRun == null) {
       return;
@@ -98,4 +163,11 @@ class Reporter {
       ),
     );
   }
+
+  String _generateTitle(String packageName) =>
+      '$packageName package analysis results';
+
+  String _generateDetails() => 'Detailed report';
+
+  String _generateSummary() => '';
 }
