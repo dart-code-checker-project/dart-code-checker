@@ -114,6 +114,8 @@ class Reporter {
 
     summary.write(_generateSummary(scannedFolder, report));
 
+    final details = _generateDetails();
+
     final checkRun = await _client.checks.checkRuns.updateCheckRun(
       _repositorySlug,
       _checkRun!,
@@ -140,6 +142,15 @@ class Reporter {
       ..logInfoMessage('Check Run Id: ${checkRun.id}')
       ..logInfoMessage('Check Suite Id: ${checkRun.checkSuiteId}')
       ..logInfoMessage('Report posted at: ${checkRun.detailsUrl}');
+  }
+
+  Future<void> postComment() async {
+    final prNumber = _workflowUtils.currentPullRequestNumber();
+    // ignore: no-empty-block
+    if (prNumber != null) {
+//      final service = PullRequestsService(_client);
+//      final pr = await service.listCommentsByPullRequest(_repositorySlug, prNumber);
+    }
   }
 
   Future<void> cancel({required Exception cause}) async {
@@ -245,3 +256,15 @@ class Reporter {
     return buffer.toString();
   }
 }
+
+/*
+
+# Metrics
+
+1. Average Number of Methods (NOM) per class
+2. Average Lines of Code (LOC) per method (operation)
+3. Average Cyclomatic Number (CYCLO) per line of code (i.e., density
+of branching points)
+
+
+*/

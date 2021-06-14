@@ -35,6 +35,7 @@ Future<void> main() async {
       foldersToAnalyze,
       result,
     );
+    await reporting.postComment();
   } on Exception catch (cause) {
     try {
       await reporting.cancel(cause: cause);
