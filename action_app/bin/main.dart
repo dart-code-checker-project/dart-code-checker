@@ -1,9 +1,6 @@
 import 'dart:io';
 
-import 'package:dart_code_metrics/config.dart';
-import 'package:dart_code_metrics/metrics_analyzer.dart';
 import 'package:dart_code_metrics_github_action_app/action_app.dart';
-import 'package:dart_code_metrics_github_action_app/src/pubspec_utils.dart';
 
 Future<void> main(List<String> args) async {
   final workflowUtils = GitHubWorkflowUtils(
