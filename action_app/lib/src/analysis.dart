@@ -13,19 +13,6 @@ class Analysis {
   Analysis._(this._client, this._checkRun, this._repositorySlug)
       : _startTime = DateTime.now();
 
-  Future<void> run() async {
-    if (_checkRun == null) {
-      return;
-    }
-
-    await _client.checks.checkRuns.updateCheckRun(
-      _repositorySlug,
-      _checkRun!,
-      startedAt: _startTime,
-      status: CheckRunStatus.inProgress,
-    );
-  }
-
   Future<void> cancel({required Exception cause}) async {
     if (_checkRun == null) {
       return;

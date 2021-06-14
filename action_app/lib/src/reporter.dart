@@ -5,17 +5,34 @@ import 'package:github/github.dart';
 import 'arguments.dart';
 import 'github_workflow_utils.dart';
 
+const _checkRunName = 'Dart Code Metrics report';
+const _homePage = 'https://github.com/dart-code-checker/dart-code-metrics';
+
 class Reporter {
   static Future<Reporter> create({
     required GitHubWorkflowUtils workflowUtils,
     required Arguments arguments,
   }) async {
+    final client =
+        GitHub(auth: Authentication.withToken(arguments.githubToken));
+    final slug = RepositorySlug.full(arguments.repositorySlug);
     try {
       final id = '${Random().nextInt(1000)}';
+      final name =
+          workflowUtils.isTestMode() ? '$_checkRunName ($id)' : _checkRunName;
 
       workflowUtils.logDebugMessage('Id attributed to checkrun: $id');
 
-      return Reporter._();
+      final checkRun = await client.checks.checkRuns.createCheckRun(
+        slug,
+        name: name.toString(),
+        headSha: arguments.commitSha,
+        status: CheckRunStatus.queued,
+        detailsUrl: _homePage,
+        externalId: id,
+      );
+
+      return Reporter._(client, checkRun, slug);
     } on GitHubError catch (e) {
       if (e.toString().contains('Resource not accessible by integration')) {
         workflowUtils.logWarningMessage(
@@ -24,11 +41,30 @@ class Reporter {
           'Consequently, no report will be made on GitHub.',
         );
 
-        return Reporter._();
+        return Reporter._(client, null, slug);
       }
       rethrow;
     }
   }
 
-  Reporter._();
+  final GitHub _client;
+  final CheckRun? _checkRun;
+  final RepositorySlug _repositorySlug;
+  final DateTime _startTime;
+
+  Reporter._(this._client, this._checkRun, this._repositorySlug)
+      : _startTime = DateTime.now();
+
+  Future<void> run() async {
+    if (_checkRun == null) {
+      return;
+    }
+
+    await _client.checks.checkRuns.updateCheckRun(
+      _repositorySlug,
+      _checkRun!,
+      startedAt: _startTime,
+      status: CheckRunStatus.inProgress,
+    );
+  }
 }

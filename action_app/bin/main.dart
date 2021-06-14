@@ -9,5 +9,12 @@ Future<void> main(List<String> args) async {
   );
 
   final arguments = Arguments(workflowUtils);
-  await Reporter.create(workflowUtils: workflowUtils, arguments: arguments);
+  final reporting = await Reporter.create(
+    workflowUtils: workflowUtils,
+    arguments: arguments,
+  );
+
+  try {
+    await reporting.run();
+  } on Exception catch (_) {}
 }
