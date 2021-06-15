@@ -54,7 +54,8 @@ jobs:
   src="https://raw.githubusercontent.com/dart-code-checker/dart-code-metrics-action/master/doc/.assets/check_run_output.png"
   alt="annotation"
   height="341,5" width="597"
-  align="center">
+  align="center"
+  style="border:1px solid #000;">
 
 * Annotation:
 
@@ -62,4 +63,5 @@ jobs:
   src="https://raw.githubusercontent.com/dart-code-checker/dart-code-metrics-action/master/doc/.assets/annotation.png"
   alt="annotation"
   height="197" width="608"
-  align="center">
+  align="center"
+  style="border:1px solid #000;">
