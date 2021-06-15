@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
+
 import 'github_action_input.dart';
 import 'github_workflow_utils.dart';
 import 'package_path.dart';
@@ -14,6 +16,8 @@ const _packagePathInput =
     GitHubActionInput('relative_path', isRequired: false, canBeEmpty: true);
 
 const _defaultFolders = ['lib'];
+
+const _pubspecYaml = 'pubspec.yaml';
 
 class Arguments {
   /// Token to call the GitHub API
@@ -40,6 +44,15 @@ class Arguments {
         packagePath.canonicalPackagePath,
         workflowUtils.actionInputValue(_packagePathInput),
         "This directory doesn't exist in your repository",
+      );
+    }
+
+    if (!File(p.join(packagePath.canonicalPackagePath, _pubspecYaml))
+        .existsSync()) {
+      throw ArgumentError.value(
+        packagePath.canonicalPackagePath,
+        workflowUtils.actionInputValue(_packagePathInput),
+        "This directory doesn't contains Dart/Flutter package",
       );
     }
 
