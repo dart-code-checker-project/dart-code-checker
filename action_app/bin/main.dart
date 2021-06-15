@@ -24,7 +24,7 @@ Future<void> main() async {
 
     final executable = pubspec.isFlutterPackage ? 'flutter' : 'dart';
     final pubGetResult = Process.runSync(executable, ['pub', 'get']);
-    stdout..writeln('$executable pub get')..writeln(pubGetResult.stdout);
+    stdout.writeln(pubGetResult.stdout);
     stderr.writeln(pubGetResult.stderr);
 
     workflowUtils.endLogGroup();
