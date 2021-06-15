@@ -52,7 +52,7 @@ jobs:
   <img
   src="https://raw.githubusercontent.com/dart-code-checker/dart-code-metrics-action/master/doc/.assets/annotation.png"
   alt="annotation"
-  height="1216" width="394"
+  height="1194" width="683"
   align="center">
 * Annotation:
   <img
