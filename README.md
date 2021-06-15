@@ -49,14 +49,17 @@ jobs:
 ### Output Example
 
 * Check run output:
+  
   <img
   src="https://raw.githubusercontent.com/dart-code-checker/dart-code-metrics-action/master/doc/.assets/annotation.png"
   alt="annotation"
-  height="1194" width="683"
+  height="597" width="341,5"
   align="center">
+
 * Annotation:
+
   <img
   src="https://raw.githubusercontent.com/dart-code-checker/dart-code-metrics-action/master/doc/.assets/annotation.png"
   alt="annotation"
-  height="1216" width="394"
+  height="608" width="197"
   align="center">
