@@ -30,7 +30,7 @@ class PubSpecUtils {
   }
 }
 
-PubSpecUtils pubspec(String canonicalPackagePath) {
+PubSpecUtils readPubspec(String canonicalPackagePath) {
   final pubspec = File('$canonicalPackagePath/$_pubspecYaml');
   final pubspecContent =
       pubspec.existsSync() ? pubspec.readAsLinesSync() : <String>[];

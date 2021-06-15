@@ -17,24 +17,37 @@ Future<void> main() async {
   );
 
   try {
+    final rootFolder = arguments.packagePath.canonicalPackagePath;
+    final pubspec = readPubspec(rootFolder);
+
+    workflowUtils.startLogGroup("Get the current package's dependencies");
+
+    final executable = pubspec.isFlutterPackage ? 'flutter' : 'dart';
+    final pubGetResult = Process.runSync(executable, ['pub', 'get']);
+    stdout..writeln('$executable pub get')..writeln(pubGetResult.stdout);
+    stderr.writeln(pubGetResult.stderr);
+
+    workflowUtils.endLogGroup();
+
     await reporting.run();
 
     workflowUtils.startLogGroup('Running Dart Code Metrics');
 
     final foldersToAnalyze = arguments.folders;
-    final rootFolder = arguments.packagePath.canonicalPackagePath;
     final options = await analysisOptionsFromFilePath(rootFolder);
     final config = Config.fromAnalysisOptions(options);
     final lintConfig = ConfigBuilder.getLintConfig(config, rootFolder);
 
-    final result = await const LintAnalyzer()
+    final lintAnalyzerReport = await const LintAnalyzer()
         .runCliAnalysis(foldersToAnalyze, rootFolder, lintConfig);
 
     await reporting.complete(
-      pubspec(rootFolder).packageName,
+      pubspec.packageName,
       foldersToAnalyze,
-      result,
+      lintAnalyzerReport,
     );
+
+    workflowUtils.endLogGroup();
   } on Exception catch (cause) {
     try {
       await reporting.cancel(cause: cause);
