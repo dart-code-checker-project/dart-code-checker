@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 
 const _unknownPackageName = 'unknown';
 
+const _flutterKey = 'flutter';
 const _pubspecYaml = 'pubspec.yaml';
 const _packageNameKey = 'name:';
 
@@ -12,6 +13,9 @@ class PubSpecUtils {
   final Iterable<String> _content;
 
   const PubSpecUtils(this._content);
+
+  bool get isFlutterPackage =>
+      _content.any((line) => line.trim().startsWith(_flutterKey));
 
   String get packageName {
     if (_content.any((line) => line.contains(_packageNameKey))) {
