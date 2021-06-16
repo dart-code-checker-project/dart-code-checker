@@ -1,4 +1,4 @@
-name: Test action app
+name: Action app
 
 on: [push, pull_request]
 
@@ -8,7 +8,9 @@ env:
   INPUT_RELATIVE_PATH: "action_app"
 
 jobs:
-  test:
+  test-action-app:
+    name: Test action app
+
     runs-on: ubuntu-latest
 
     defaults:
