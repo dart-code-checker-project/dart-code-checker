@@ -1,12 +1,6 @@
 import 'dart:math';
 
-// ignore: implementation_imports
-import 'package:dart_code_metrics/src/analyzers/lint_analyzer/metrics/metrics_list/cyclomatic_complexity/cyclomatic_complexity_metric.dart';
-// ignore: implementation_imports
-import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/lint_file_report.dart';
-// ignore: implementation_imports
-import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/severity.dart';
-
+import 'package:dart_code_metrics/lint_analyzer.dart';
 import 'package:github/github.dart';
 
 import 'arguments.dart';
@@ -17,6 +11,7 @@ const _checkRunName = 'Dart Code Metrics report';
 const _homePage = 'https://github.com/dart-code-checker/dart-code-metrics';
 
 const _sourceLinesOfCodeMetricId = 'source-lines-of-code';
+const _cyclomaticComplexityMetricId = 'cyclomatic-complexity';
 
 class Reporter {
   static Future<Reporter> create({
@@ -213,9 +208,7 @@ class Reporter {
             0,
             (prevValue, functionReport) =>
                 prevValue +
-                (functionReport
-                        .metric(CyclomaticComplexityMetric.metricId)
-                        ?.value ??
+                (functionReport.metric(_cyclomaticComplexityMetricId)?.value ??
                     0),
           ),
     );

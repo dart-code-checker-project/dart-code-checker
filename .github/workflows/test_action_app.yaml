@@ -9,8 +9,6 @@ env:
 
 jobs:
   test:
-    name: Test on stable dart
-
     runs-on: ubuntu-latest
 
     defaults:

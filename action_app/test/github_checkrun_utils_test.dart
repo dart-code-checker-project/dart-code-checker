@@ -1,12 +1,7 @@
 @TestOn('vm')
 import 'package:action_app/src/github_checkrun_utils.dart';
 import 'package:action_app/src/github_workflow_utils.dart';
-import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/issue.dart'
-    as dcm;
-import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/replacement.dart'
-    as dcm;
-import 'package:dart_code_metrics/src/analyzers/lint_analyzer/models/severity.dart'
-    as dcm;
+import 'package:dart_code_metrics/lint_analyzer.dart' as dcm;
 import 'package:github/github.dart' as github;
 import 'package:mocktail/mocktail.dart';
 import 'package:source_span/source_span.dart';
