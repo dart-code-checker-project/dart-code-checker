@@ -2,7 +2,7 @@ FROM google/dart:latest
 
 COPY action_app/ /action_app/
 
-RUN cd /app \
+RUN cd /action_app \
     && pub get
 
 ENV PATH /flutter/bin:$PATH
