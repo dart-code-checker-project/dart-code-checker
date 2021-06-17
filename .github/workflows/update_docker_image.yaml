@@ -73,3 +73,11 @@ jobs:
 
       - name: Build new image
         run: sudo docker build --label "fluttersha=$CURRENT_FLUTTER" --label "metricsversion=$CURRENT_METRICS" --label "dartdigest=$CURRENT_DART" -f $DOCKERFILE -t $IMAGE:$TAG .
+
+      - name: Push new image
+        env:
+          DOCKER_USERNAME: dkrutskikh
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run: |
+          echo $DOCKER_TOKEN | sudo docker login --username=$DOCKER_USERNAME --password-stdin
+          sudo docker push $IMAGE:$TAG
