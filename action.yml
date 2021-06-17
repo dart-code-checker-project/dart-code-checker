@@ -1,12 +1,24 @@
-name: 'Container Action Template'
-description: 'Get started with Container actions'
-author: 'GitHub'
-inputs: 
-  myInput:
-    description: 'Input to use'
-    default: 'world'
+name: 'Dart Code Metrics Action'
+description: 'A GitHub action to perform Dart Code Metrics checks automatically.'
+author: 'Dart Code Checker team'
+
+branding:
+  color: "blue"
+  icon: "zoom-in"
+
+inputs:
+  github_token:
+    description: "Token to connect to GitHub. Use secrets.GITHUB_TOKEN"
+    required: true
+  folders:
+    description: "List of folders whose contents will be scanned."
+    required: false
+    default: "lib"
+  relative_path:
+    description: "Path of the package relatively to the root of the repository"
+    required: false
+    default: ""
+    
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.myInput }}
+  using: "docker"
+  image: "Dockerfile"

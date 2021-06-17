@@ -1,7 +1,3 @@
-FROM alpine:3.10
+FROM dkrutskikh/dart_code_metrics_action:v1
 
-COPY LICENSE README.md /
-
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["dart", "run", "/action_app/bin/main.dart"]
