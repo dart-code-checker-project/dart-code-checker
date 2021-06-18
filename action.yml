@@ -1,10 +1,10 @@
-name: 'Dart Code Metrics Action'
-description: 'A GitHub action to perform Dart Code Metrics checks automatically.'
-author: 'Dart Code Checker team'
+name: "Dart Code Metrics Action"
+description: "A GitHub action to perform Dart Code Metrics checks automatically."
+author: "Dart Code Checker team"
 
 branding:
   color: "blue"
-  icon: "zoom-in"
+  icon: "search"
 
 inputs:
   github_token:
@@ -18,7 +18,7 @@ inputs:
     description: "Path of the package relatively to the root of the repository"
     required: false
     default: ""
-    
+
 runs:
   using: "docker"
   image: "Dockerfile"
