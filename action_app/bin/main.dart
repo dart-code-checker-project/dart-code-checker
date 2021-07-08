@@ -35,11 +35,10 @@ Future<void> main() async {
 
     final foldersToAnalyze = arguments.folders;
     final options = await analysisOptionsFromFilePath(rootFolder);
-    final config = Config.fromAnalysisOptions(options);
-    final lintConfig = ConfigBuilder.getLintConfig(config, rootFolder);
+    final config = LintConfig.fromAnalysisOptions(options);
 
     final lintAnalyzerReport = await const LintAnalyzer()
-        .runCliAnalysis(foldersToAnalyze, rootFolder, lintConfig);
+        .runCliAnalysis(foldersToAnalyze, rootFolder, config);
 
     await reporting.complete(
       pubspec.packageName,
