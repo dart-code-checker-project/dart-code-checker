@@ -1,0 +1,15 @@
+name: test_action_package
+version: 1.0.0
+description: A test package for testing GitHub action.
+publish_to: "none"
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  dart_code_metrics_action_test_private_repo:
+    git: git@github.com:dkrutskikh/dart-code-metrics-action-test-private-repo.git
+
+dev_dependencies:
+  dart_code_metrics: ^4.0.0
+  test: ^1.17.9

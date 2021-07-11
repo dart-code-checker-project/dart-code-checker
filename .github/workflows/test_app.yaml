@@ -1,0 +1,27 @@
+name: Test app
+
+on: [push, pull_request]
+
+env:
+  INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  INPUT_FOLDERS: "lib"
+  INPUT_RELATIVE_PATH: "test_app"
+
+jobs:
+  test-action-app:
+    name: Test action app
+
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: test_app
+
+    steps:
+      - uses: dart-lang/setup-dart@v1
+      - uses: actions/checkout@v2
+      - name: Run action app
+        run: |
+          (cd ../action_app; dart pub get)
+          dart run ../action_app/bin/main.dart
