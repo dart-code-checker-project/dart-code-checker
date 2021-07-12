@@ -16,6 +16,10 @@ Future<void> main() async {
     arguments: arguments,
   );
 
+  if (arguments.gitHubPersonalAccessTokenKey.isNotEmpty) {
+    gitHubAuthSetup(arguments.gitHubPersonalAccessTokenKey, workflowUtils);
+  }
+
   try {
     final rootFolder = arguments.packagePath.canonicalPackagePath;
     final pubspecUtils = readPubspec(rootFolder);

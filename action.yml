@@ -8,8 +8,12 @@ branding:
 
 inputs:
   github_token:
-    description: "Token to connect to GitHub. Use secrets.GITHUB_TOKEN"
+    description: "Token to connect to GitHub. Use secrets.GITHUB_TOKEN."
     required: true
+  github_pat:
+    description: "Personal access token. Required if you had private GitHub repository in the package dependencies."
+    required: false
+    default: ""
   folders:
     description: "List of folders whose contents will be scanned."
     required: false
