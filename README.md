@@ -47,7 +47,7 @@ jobs:
 | **folders**       |                                                                    | List of folders whose contents will be scanned.                                                                                                                                                                                                                        | [`lib`] |
 | **relative_path** |                                                                    | If your package isn't at the root of the repository, set this input to indicate its location.                                                                                                                                                                          |         |
 | **github_pat**    | Required if you had private GitHub repository in your pubspec.yaml |                                                                                                                                                                                                                                                                        |         |
-    
+     
 ### Output Example
 
 * Check run output:
