@@ -41,12 +41,13 @@ jobs:
 
 ### Inputs
 
-| Name              | Required | Description                                                                                                                                                                                                                                                            | Default |
-| :---------------- | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
-| **github_token**  | ☑️        | Required to post a report on GitHub. *Note:* the secret [`GITHUB_TOKEN`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token) is already provided by GitHub and you don't have to set it up yourself. |         |
-| **folders**       |          | List of folders whose contents will be scanned.                                                                                                                                                                                                                        | [`lib`] |
-| **relative_path** |          | If your package isn't at the root of the repository, set this input to indicate its location.                                                                                                                                                                          |         |
-
+| Name              | Required                                                           | Description                                                                                                                                                                                                                                                            | Default |
+| :---------------- | :----------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------ |
+| **github_token**  | ☑️                                                                  | Required to post a report on GitHub. *Note:* the secret [`GITHUB_TOKEN`](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/authenticating-with-the-github_token) is already provided by GitHub and you don't have to set it up yourself. |         |
+| **folders**       |                                                                    | List of folders whose contents will be scanned.                                                                                                                                                                                                                        | [`lib`] |
+| **relative_path** |                                                                    | If your package isn't at the root of the repository, set this input to indicate its location.                                                                                                                                                                          |         |
+| **github_pat**    | Required if you had private GitHub repository in your pubspec.yaml |                                                                                                                                                                                                                                                                        |         |
+ 
 ### Output Example
 
 * Check run output:
