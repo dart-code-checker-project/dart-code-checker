@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 env:
   INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  INPUT_GITHUB_PAT: ${{ secrets.PAT }}
   INPUT_FOLDERS: "lib"
   INPUT_RELATIVE_PATH: "test_app"
 

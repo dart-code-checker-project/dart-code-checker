@@ -12,6 +12,9 @@ const _foldersInput =
 const _githubTokenInput =
     GitHubActionInput('github_token', isRequired: true, canBeEmpty: false);
 
+const _githubPersonalAccessTokenInput =
+    GitHubActionInput('github_pat', isRequired: false, canBeEmpty: true);
+
 const _packagePathInput =
     GitHubActionInput('relative_path', isRequired: false, canBeEmpty: true);
 
@@ -22,6 +25,9 @@ const _pubspecYaml = 'pubspec.yaml';
 class Arguments {
   /// Token to call the GitHub API
   final String gitHubToken;
+
+  /// Token for access to private repos on GitHub
+  final String gitHubPersonalAccessTokenKey;
 
   /// Head SHA of the commit associated to the current workflow
   final String commitSha;
@@ -65,6 +71,8 @@ class Arguments {
 
     return Arguments._(
       gitHubToken: workflowUtils.actionInputValue(_githubTokenInput),
+      gitHubPersonalAccessTokenKey:
+          workflowUtils.actionInputValue(_githubPersonalAccessTokenInput),
       commitSha: workflowUtils.currentCommitSHA(),
       repositorySlug: workflowUtils.currentRepositorySlug(),
       packagePath: packagePath,
@@ -74,6 +82,7 @@ class Arguments {
 
   Arguments._({
     required this.gitHubToken,
+    required this.gitHubPersonalAccessTokenKey,
     required this.commitSha,
     required this.repositorySlug,
     required this.packagePath,
