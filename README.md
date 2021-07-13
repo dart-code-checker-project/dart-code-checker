@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD041 -->
 [![Build Status](https://shields.io/github/workflow/status/dart-code-checker/dart-code-metrics-action/test?logo=github&logoColor=white)](https://github.com/dart-code-checker/dart-code-metrics-action/)
-[![Action Version](https://img.shields.io/badge/action-v1.0.0-blue?logo=github&logoColor=white)](https://github.com/marketplace/actions/dart-code-metrics-action/)
+[![Action Version](https://img.shields.io/github/v/tag/dart-code-checker/dart-code-metrics-action?color=blue&label=action&logo=github&logoColor=white)](https://github.com/marketplace/actions/dart-code-metrics-action/)
 [![License](https://img.shields.io/github/license/dart-code-checker/dart-code-metrics-action)](https://github.com/dart-code-checker/dart-code-metrics-action/blob/master/LICENSE)
 [![GitHub popularity](https://img.shields.io/github/stars/dart-code-checker/dart-code-metrics-action?logo=github&logoColor=white)](https://github.com/dart-code-checker/dart-code-metrics-action/stargazers)
 <!-- markdownlint-enable MD041 -->
@@ -15,18 +15,18 @@ This action allows to use Dart Code Metrics from GitHub Actions.
 
 ## Usage
 
-Create `dartcodemetrics.yml` under `.github/workflows` With the following contents.
+Create `dartcodemetrics.yaml` under `.github/workflows` With the following contents.
 
 ### Default configuration
 
 ```yml
-name: dart-code-metrics-action
+name: Dart Code Metrics
 
 on: [push]
 
 jobs:
   check:
-    name: dart-code-metrics
+    name: dart-code-metrics-action
 
     runs-on: ubuntu-latest
 
@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
           
       - name: dart-code-metrics
-        uses: dart-code-checker/dart-code-metrics-action@main
+        uses: dart-code-checker/dart-code-metrics-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -65,3 +65,11 @@ jobs:
   alt="annotation"
   height="197" width="608"
   align="center">
+
+## How to contribute
+
+If you would like to help contribute to this GitHub Action, please see [CONTRIBUTING](./CONTRIBUTING.md)
+
+## LICENCE
+
+The scripts and documentation in this project are released under the [MIT License](./LICENSE)
