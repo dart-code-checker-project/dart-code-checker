@@ -1,0 +1,83 @@
+name: Update Docker image
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/update_docker_image.yaml"
+      - "action_app/**"
+      - "scripts/Dockerfile"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/update_docker_image.yaml"
+      - "action_app/**"
+      - "scripts/Dockerfile"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    env:
+      TAG: v1
+      DOCKERFILE: "scripts/Dockerfile"
+      IMAGE: dkrutskikh/dart_code_metrics_action
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Get labels
+        continue-on-error: true
+        id: labels
+        uses: axel-op/docker-labels-retriever@master
+        with:
+          image: ${{ env.IMAGE }}:${{ env.TAG }}
+          registry: docker-hub
+
+      - name: Check current image
+        id: check
+        env:
+          EVENT: ${{ github.event_name }}
+          DART_IMAGE: google/dart
+          DART_VERSION: latest
+          GIT_FLUTTER: git://github.com/flutter/flutter.git
+          FLUTTER_BRANCH: stable
+          METRICS_DOC: https://pub.dev/api/documentation/dart_code_metrics
+        run: |
+          CURRENT_FLUTTER=$(git ls-remote $GIT_FLUTTER refs/heads/$FLUTTER_BRANCH | cut -f 1)
+          CURRENT_METRICS=$(curl -s $METRICS_DOC | jq -r '.latestStableVersion')
+          API_TOKEN=$(curl -s "https://auth.docker.io/token?scope=repository:$DART_IMAGE:pull&service=registry.docker.io" | jq -r '.token')
+          CURRENT_DART=$(curl -s -H "Authorization: Bearer $API_TOKEN" -H "Accept: application/vnd.docker.distribution.manifest.v2+json" "https://registry-1.docker.io/v2/$DART_IMAGE/manifests/$DART_VERSION" | jq -r '.config.digest')
+          PREVIOUS_FLUTTER=${{ steps.labels.outputs.fluttersha }}
+          PREVIOUS_METRICS=${{ steps.labels.outputs.metricsversion }}
+          PREVIOUS_DART=${{ steps.labels.outputs.dartdigest }}
+          echo $CURRENT_DART is the sha for ${DART_IMAGE}:${DART_VERSION}
+          echo $PREVIOUS_DART is the sha labelled with the Docker image 
+          echo $CURRENT_FLUTTER is the latest commit in the $FLUTTER_BRANCH branch of Flutter
+          echo $PREVIOUS_FLUTTER is the commit of Flutter on Docker image
+          echo $CURRENT_METRICS is the latest version of dart code metrics
+          echo $PREVIOUS_METRICS is the version of dart code metrics on Docker image
+          if [ "$EVENT" = push ] || [ "$CURRENT_FLUTTER" != "$PREVIOUS_FLUTTER" ] || [ "$CURRENT_METRICS" != "$PREVIOUS_METRICS" ] || [ "$CURRENT_DART" != "$PREVIOUS_DART" ]; then
+            SHOULD_PUSH=true
+          else
+            SHOULD_PUSH=false
+          fi
+          echo "CURRENT_FLUTTER=$CURRENT_FLUTTER" >> $GITHUB_ENV
+          echo "CURRENT_METRICS=$CURRENT_METRICS" >> $GITHUB_ENV
+          echo "CURRENT_DART=$CURRENT_DART" >> $GITHUB_ENV
+          echo "::set-output name=should_push::$SHOULD_PUSH"
+
+      - name: Build new image
+        run: sudo docker build --label "fluttersha=$CURRENT_FLUTTER" --label "metricsversion=$CURRENT_METRICS" --label "dartdigest=$CURRENT_DART" -f $DOCKERFILE -t $IMAGE:$TAG .
+
+      - name: Push new image
+        env:
+          DOCKER_USERNAME: dkrutskikh
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run: |
+          echo $DOCKER_TOKEN | sudo docker login --username=$DOCKER_USERNAME --password-stdin
+          sudo docker push $IMAGE:$TAG
