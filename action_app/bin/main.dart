@@ -11,7 +11,7 @@ Future<void> main() async {
   );
 
   final arguments = Arguments(workflowUtils);
-  final reporting = await Reporter.create(
+  final reporter = await AnalyzeReporter.create(
     workflowUtils: workflowUtils,
     arguments: arguments,
   );
@@ -26,7 +26,7 @@ Future<void> main() async {
 
     _getTheTargetPackagesDependencies(workflowUtils, pubspecUtils, rootFolder);
 
-    await reporting.run();
+    await reporter.run();
 
     workflowUtils.startLogGroup('Running Dart Code Metrics');
 
@@ -37,7 +37,7 @@ Future<void> main() async {
     final lintAnalyzerReport = await const LintAnalyzer()
         .runCliAnalysis(foldersToAnalyze, rootFolder, config);
 
-    await reporting.complete(
+    await reporter.complete(
       pubspecUtils.packageName,
       foldersToAnalyze,
       lintAnalyzerReport,
@@ -46,7 +46,7 @@ Future<void> main() async {
     workflowUtils.endLogGroup();
   } on Exception catch (cause) {
     try {
-      await reporting.cancel(cause: cause);
+      await reporter.cancel(cause: cause);
       // ignore: avoid_catches_without_on_clauses
     } catch (error, stackTrace) {
       workflowUtils.logErrorMessage('$error\n$stackTrace');

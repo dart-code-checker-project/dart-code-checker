@@ -7,14 +7,14 @@ import 'arguments.dart';
 import 'github_checkrun_utils.dart';
 import 'github_workflow_utils.dart';
 
-const _checkRunName = 'Dart Code Metrics report';
+const _checkRunName = 'Dart Code Metrics analyze report';
 const _homePage = 'https://github.com/dart-code-checker/dart-code-metrics';
 
 const _sourceLinesOfCodeMetricId = 'source-lines-of-code';
 const _cyclomaticComplexityMetricId = 'cyclomatic-complexity';
 
-class Reporter {
-  static Future<Reporter> create({
+class AnalyzeReporter {
+  static Future<AnalyzeReporter> create({
     required GitHubWorkflowUtils workflowUtils,
     required Arguments arguments,
   }) async {
@@ -37,7 +37,7 @@ class Reporter {
         externalId: id,
       );
 
-      return Reporter._(client, workflowUtils, checkRun, slug);
+      return AnalyzeReporter._(client, workflowUtils, checkRun, slug);
     } on GitHubError catch (e) {
       if (e.toString().contains('Resource not accessible by integration')) {
         workflowUtils.logWarningMessage(
@@ -46,7 +46,7 @@ class Reporter {
           'Consequently, no report will be made on GitHub.',
         );
 
-        return Reporter._(client, workflowUtils, null, slug);
+        return AnalyzeReporter._(client, workflowUtils, null, slug);
       }
       rethrow;
     }
@@ -58,7 +58,7 @@ class Reporter {
   final RepositorySlug _repositorySlug;
   final DateTime _startTime;
 
-  Reporter._(
+  AnalyzeReporter._(
     this._client,
     this._workflowUtils,
     this._checkRun,
