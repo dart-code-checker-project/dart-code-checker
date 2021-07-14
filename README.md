@@ -1,8 +1,9 @@
 <!-- markdownlint-disable MD041 -->
 [![Build Status](https://shields.io/github/workflow/status/dart-code-checker/dart-code-metrics-action/test?logo=github&logoColor=white)](https://github.com/dart-code-checker/dart-code-metrics-action/)
-[![Action Version](https://img.shields.io/github/v/tag/dart-code-checker/dart-code-metrics-action?color=blue&label=action&logo=github&logoColor=white)](https://github.com/marketplace/actions/dart-code-metrics-action/)
+[![Action Version](https://img.shields.io/github/v/release/dart-code-checker/dart-code-metrics-action?color=blue&label=action&logo=github&logoColor=white)](https://github.com/marketplace/actions/dart-code-metrics-action/)
 [![License](https://img.shields.io/github/license/dart-code-checker/dart-code-metrics-action)](https://github.com/dart-code-checker/dart-code-metrics-action/blob/master/LICENSE)
-[![GitHub popularity](https://img.shields.io/github/stars/dart-code-checker/dart-code-metrics-action?logo=github&logoColor=white)](https://github.com/dart-code-checker/dart-code-metrics-action/stargazers)
+[![GitHub popularity](https://img.shields.io/github/stars/dart-code-checker/dart-code-metrics-action?logo=github&logoColor=white)](https://github.com/dart-code-checker/dart-code-metrics-action/stargazers/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dkrutskikh/dart_code_metrics_action?label=runs&logo=github&logoColor=white)](https://github.com/marketplace/actions/dart-code-metrics-action/)
 <!-- markdownlint-enable MD041 -->
 
 # Dart Code Metrics Action
