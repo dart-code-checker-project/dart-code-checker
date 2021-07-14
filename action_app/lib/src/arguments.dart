@@ -6,6 +6,12 @@ import 'github_action_input.dart';
 import 'github_workflow_utils.dart';
 import 'package_path.dart';
 
+const _checkUnusedFilesInput = GitHubActionInput(
+  'check_unused_files',
+  isRequired: false,
+  canBeEmpty: true,
+);
+
 const _foldersInput =
     GitHubActionInput('folders', isRequired: false, canBeEmpty: true);
 
@@ -23,6 +29,9 @@ const _defaultFolders = ['lib'];
 const _pubspecYaml = 'pubspec.yaml';
 
 class Arguments {
+  /// Is need to find unused files
+  final bool checkUnusedFiles;
+
   /// Token to call the GitHub API
   final String gitHubToken;
 
@@ -62,6 +71,10 @@ class Arguments {
       );
     }
 
+    final checkUnusedFiles = {'true', 'yes', '1'}.contains(
+      workflowUtils.actionInputValue(_checkUnusedFilesInput).toLowerCase(),
+    );
+
     final folders = workflowUtils
         .actionInputValue(_foldersInput)
         .split(',')
@@ -70,6 +83,7 @@ class Arguments {
         .toSet();
 
     return Arguments._(
+      checkUnusedFiles: checkUnusedFiles,
       gitHubToken: workflowUtils.actionInputValue(_githubTokenInput),
       gitHubPersonalAccessTokenKey:
           workflowUtils.actionInputValue(_githubPersonalAccessTokenInput),
@@ -81,6 +95,7 @@ class Arguments {
   }
 
   Arguments._({
+    required this.checkUnusedFiles,
     required this.gitHubToken,
     required this.gitHubPersonalAccessTokenKey,
     required this.commitSha,

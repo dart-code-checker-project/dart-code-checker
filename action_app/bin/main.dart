@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:action_app/action_app.dart';
 import 'package:dart_code_metrics/config.dart';
 import 'package:dart_code_metrics/lint_analyzer.dart';
+import 'package:dart_code_metrics/unused_files_analyzer.dart';
 
 Future<void> main() async {
   final workflowUtils = GitHubWorkflowUtils(
@@ -11,7 +12,11 @@ Future<void> main() async {
   );
 
   final arguments = Arguments(workflowUtils);
-  final reporter = await AnalyzeReporter.create(
+  final analyzeReporter = await AnalyzeReporter.create(
+    workflowUtils: workflowUtils,
+    arguments: arguments,
+  );
+  final unusedFilesFileReport = await UnusedFilesReporter.create(
     workflowUtils: workflowUtils,
     arguments: arguments,
   );
@@ -26,27 +31,43 @@ Future<void> main() async {
 
     _getTheTargetPackagesDependencies(workflowUtils, pubspecUtils, rootFolder);
 
-    await reporter.run();
+    await analyzeReporter.run();
+    await unusedFilesFileReport.run();
 
     workflowUtils.startLogGroup('Running Dart Code Metrics');
 
     final foldersToAnalyze = arguments.folders;
     final options = await analysisOptionsFromFilePath(rootFolder);
-    final config = LintConfig.fromAnalysisOptions(options);
+    final lintConfig = LintConfig.fromAnalysisOptions(options);
 
     final lintAnalyzerReport = await const LintAnalyzer()
-        .runCliAnalysis(foldersToAnalyze, rootFolder, config);
+        .runCliAnalysis(foldersToAnalyze, rootFolder, lintConfig);
 
-    await reporter.complete(
+    await analyzeReporter.complete(
       pubspecUtils.packageName,
       foldersToAnalyze,
       lintAnalyzerReport,
     );
 
+    final unusedFilesConfig = UnusedFilesConfig.fromAnalysisOptions(options);
+
+    final unusedFilesReport = await const UnusedFilesAnalyzer().runCliAnalysis(
+      foldersToAnalyze,
+      rootFolder,
+      unusedFilesConfig,
+    );
+
+    await unusedFilesFileReport.complete(
+      pubspecUtils.packageName,
+      foldersToAnalyze,
+      unusedFilesReport,
+    );
+
     workflowUtils.endLogGroup();
   } on Exception catch (cause) {
     try {
-      await reporter.cancel(cause: cause);
+      await analyzeReporter.cancel(cause: cause);
+      await unusedFilesFileReport.cancel(cause: cause);
       // ignore: avoid_catches_without_on_clauses
     } catch (error, stackTrace) {
       workflowUtils.logErrorMessage('$error\n$stackTrace');
