@@ -43,13 +43,14 @@ class GitHubCheckRunUtils {
       return _severityMapping[severity]!;
     }
 
-    _workflowUtils.logInfoMessage('Unknow severity: $severity');
+    _workflowUtils.logDebugMessage('Unknow severity: $severity');
 
     return github.CheckRunAnnotationLevel.notice;
   }
 }
 
 const _severityMapping = {
+  dcm.Severity.none: github.CheckRunAnnotationLevel.notice,
   dcm.Severity.style: github.CheckRunAnnotationLevel.notice,
   dcm.Severity.performance: github.CheckRunAnnotationLevel.warning,
   dcm.Severity.warning: github.CheckRunAnnotationLevel.warning,
