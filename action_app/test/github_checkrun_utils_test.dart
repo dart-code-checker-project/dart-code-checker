@@ -116,33 +116,17 @@ void main() {
       });
     });
 
-    group('severityToAnnotationLevel returns', () {
-      test('github annotation level from dart_code_metrics severity', () {
+    test(
+      'severityToAnnotationLevel returns github annotation level from dart_code_metrics severity',
+      () {
         final utils = GitHubCheckRunUtils(workflowUtilsMock);
 
         expect(
           utils.severityToAnnotationLevel(dcm.Severity.warning),
           equals(github.CheckRunAnnotationLevel.warning),
         );
-        verifyNever(() => workflowUtilsMock.logInfoMessage(any()));
-      });
-
-      test(
-        'github annotation level notice from unknown dart_code_metrics severity',
-        () {
-          final utils = GitHubCheckRunUtils(workflowUtilsMock);
-
-          expect(
-            utils.severityToAnnotationLevel(dcm.Severity.none),
-            equals(github.CheckRunAnnotationLevel.notice),
-          );
-          expect(
-            verify(() => workflowUtilsMock.logInfoMessage(captureAny()))
-                .captured,
-            equals(['Unknow severity: none']),
-          );
-        },
-      );
-    });
+        verifyNever(() => workflowUtilsMock.logDebugMessage(any()));
+      },
+    );
   });
 }
